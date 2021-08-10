@@ -1,14 +1,23 @@
 package com.univer.universerver.source.security.jwt;
 
-import com.univer.universerver.source.exception.TokenAuthenticationException;
-import com.univer.universerver.source.security.service.UserPrinciple;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.impl.DefaultClaims;
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.security.core.Authentication;
-import java.util.Date;
+import org.springframework.stereotype.Component;
+
+import com.univer.universerver.source.exception.TokenAuthenticationException;
+import com.univer.universerver.source.security.service.UserPrinciple;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.impl.DefaultClaims;
 
 
 
@@ -21,7 +30,7 @@ public class JwtProvider {
 
     private String jwtSecret = "JWTSuperSecretKey";
 
-    private long jwtExpiration = 8640000000000000000L;
+    private long jwtExpiration = 8640000000L;
 
     private static String JWT_TOKEN_TYPE_KEY = "token_type";
 

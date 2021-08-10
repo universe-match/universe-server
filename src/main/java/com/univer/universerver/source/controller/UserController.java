@@ -1,6 +1,27 @@
 package com.univer.universerver.source.controller;
 
-import com.univer.universerver.source.model.Role;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.univer.universerver.source.model.User;
 import com.univer.universerver.source.model.dto.AuthTokenDTO;
 import com.univer.universerver.source.model.request.LoginForm;
@@ -11,34 +32,15 @@ import com.univer.universerver.source.security.jwt.JwtProvider;
 import com.univer.universerver.source.security.service.UserPrinciple;
 import com.univer.universerver.source.service.AuthTokenService;
 import com.univer.universerver.source.service.UserService;
-import com.univer.universerver.source.utils.RoleName;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.*;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/api/auth")
-public class AuthController extends HttpServlet {
+@RequestMapping("/api/user")
+public class UserController extends HttpServlet {
 
     @Autowired
     AuthenticationManager authenticationManager;
-
-    @Autowired
-    UserRepository userRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -81,7 +83,6 @@ public class AuthController extends HttpServlet {
             Map<String, String> map =new HashMap<String, String>();
             map.put("ROLE", ROLE);
             map.put("accessToken", authTokenDTO.getAccessToken());
-            map.put("jwt", authTokenDTO.getAccessToken());
             map.put("refreshToken", authTokenDTO.getRefreshToken());
             return ResponseEntity.ok(map);
         }catch(Exception e) {
@@ -95,29 +96,13 @@ public class AuthController extends HttpServlet {
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@RequestBody SignUpForm signUpRequest) {
 
-        if(userRepository.existsByNickname(signUpRequest.getNickname())) {
-            return new ResponseEntity<String>("닉네임이 이미 존재합니다!",
-                    HttpStatus.BAD_REQUEST);
-        }
 
-        if(userRepository.existsByUserid(signUpRequest.getUserid())) {
-            return new ResponseEntity<String>("아이디가 이미 존재합니다!",
-                    HttpStatus.BAD_REQUEST);
-        }
-        try {
-            // Creating user's account
-            userService.registerUser(signUpRequest);
+       userService.registerUser(signUpRequest);
             //이메일 인증
 //            if(!user.getEmail().isEmpty()) {
 //                verificationTokenService.sendAuthEmail(user.getId(), user.getEmail());
 //            }
-            return new ResponseEntity<>("성공적으로 가입되었습니다.", HttpStatus.OK);
-        }catch(Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-
+       return new ResponseEntity<>("성공적으로 가입되었습니다.", HttpStatus.OK);
     }
 
     @ApiOperation(value="토큰재발행",notes="토큰재발행")

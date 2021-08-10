@@ -91,10 +91,6 @@ public class User extends DateAudit {
     @ColumnDefault("0")
     private boolean alarmCheck;
 
-    @Column(name="grade")
-    @ColumnDefault("0")
-    private long grade;
-
     @Column(name="point")
     @ColumnDefault("0")
     private long point;
