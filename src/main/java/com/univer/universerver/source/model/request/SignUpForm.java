@@ -24,11 +24,9 @@ public class SignUpForm {
     @Email
     private String email;
 
-    private String sex;
+    private String gender;
 
     private String age;
-
-    private Set<String> role;
 
     @NotBlank
     @Size(min = 6, max = 40)

@@ -6,13 +6,11 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.univer.universerver.source.common.response.ErrorCode;
-import com.univer.universerver.source.common.response.exception.UserDuplicateException;
+import com.univer.universerver.source.common.response.exception.UserException;
 import com.univer.universerver.source.model.Role;
 import com.univer.universerver.source.model.User;
 import com.univer.universerver.source.model.request.SignUpForm;
@@ -37,14 +35,15 @@ public class UserService {
     {
     	
 		if(userRepository.existsByUserid(signUpForm.getUserid())) {
-			throw new UserDuplicateException(ErrorCode.USERID_DUPLICATION);
+			throw new UserException(ErrorCode.USERID_DUPLICATION);
 	    }
         if(userRepository.existsByNickname(signUpForm.getNickname())) {
-        	throw new UserDuplicateException(ErrorCode.NICKNAME_DUPLICATION);
+        	throw new UserException(ErrorCode.NICKNAME_DUPLICATION);
         }
         User user = new User(signUpForm, encoder.encode(signUpForm.getPassword()));
 
-        Set<String> strRoles = signUpForm.getRole();
+        Set<String> strRoles = new HashSet<>();
+        strRoles.add("user");
         Set<Role> roles = new HashSet<>();
 
         strRoles.forEach(role -> {

@@ -5,11 +5,10 @@ import com.univer.universerver.source.common.response.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public class UserDuplicateException extends RuntimeException{
+public class MatchRoomDuplicateException extends RuntimeException{
+	private ErrorCode errorCode;
 
-    private ErrorCode errorCode;
-
-    public UserDuplicateException(ErrorCode errorCode){
+    public MatchRoomDuplicateException(ErrorCode errorCode){
         this.errorCode = errorCode;
     }
 }

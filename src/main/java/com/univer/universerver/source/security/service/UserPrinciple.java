@@ -34,13 +34,11 @@ public class UserPrinciple implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserPrinciple(Long id, String name,
-                         String userid, String email, String password,String nickname,
-                         Collection<? extends GrantedAuthority> authorities) {
+                         String userid, String email, String password,Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.name = name;
         this.userid = userid;
         this.email = email;
-        this.nickname=nickname;
         this.password = password;
         this.authorities = authorities;
     }
@@ -52,11 +50,10 @@ public class UserPrinciple implements UserDetails {
 
         return new UserPrinciple(
                 user.getId(),
-                user.getUserid(),
                 user.getNickname(),
+                user.getUserid(),
                 user.getEmail(),
                 user.getPassword(),
-                user.getSex(),
                 authorities
         );
     }
