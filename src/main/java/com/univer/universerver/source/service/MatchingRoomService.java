@@ -16,14 +16,14 @@ import com.univer.universerver.source.repository.MatchRoomRepository;
 import com.univer.universerver.source.repository.UserRepository;
 
 @Service
-public class MatchRoomService {
+public class MatchingRoomService {
 
 	@Autowired
 	private MatchRoomRepository matchRoomRepository;
 	@Autowired
 	private UserRepository userRepository;
 	
-	public void makeGroup(MatchroomReq matchroomReq, Principal principal) {
+	public MatchRoom makeGroup(MatchroomReq matchroomReq, Principal principal) {
 		
 		if(principal==null) {
 			throw new UserException(ErrorCode.NOT_LOGIN);
@@ -43,7 +43,7 @@ public class MatchRoomService {
 		matchroom.setFromDate(matchroomReq.getFromDate());
 		matchroom.setToDate(matchroomReq.getToDate());
 		matchroom.setUser(user.get());
-		matchRoomRepository.save(matchroom);
+		return matchRoomRepository.save(matchroom);
 	}
 
 }
