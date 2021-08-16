@@ -21,13 +21,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.univer.universerver.source.config.S3Uploader;
 import com.univer.universerver.source.model.User;
 import com.univer.universerver.source.model.dto.AuthTokenDTO;
+import com.univer.universerver.source.model.dto.MatchingDTO;
 import com.univer.universerver.source.model.request.LoginForm;
 import com.univer.universerver.source.model.request.SignUpForm;
 import com.univer.universerver.source.repository.RoleRepository;
-import com.univer.universerver.source.repository.UserRepository;
 import com.univer.universerver.source.security.jwt.JwtProvider;
 import com.univer.universerver.source.security.service.UserPrinciple;
 import com.univer.universerver.source.service.AuthTokenService;
@@ -56,6 +58,7 @@ public class UserController extends HttpServlet {
 
     @Autowired
     AuthTokenService authTokenService;
+
 
 
     @ApiOperation(value="로그인",notes="로그인")
@@ -119,4 +122,5 @@ public class UserController extends HttpServlet {
             return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
 }
