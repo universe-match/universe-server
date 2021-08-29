@@ -88,6 +88,19 @@ public class User extends DateAudit {
     @Column(name="valid_user")
     private String validUser;
     
+    @Column(name="universeName")
+    private String universeName;//대학이름
+    
+    @Column(name="major")
+    private String major;//전
+    
+    @Column(name="profile_img")
+    private String profileImg;//회원사
+    
+    @Column(name="universe_certiimg")
+    private String universeCertiImg;//학생
+    
+    
     @NotBlank
     @Size(min=6, max = 100)
     @JsonIgnore
@@ -148,6 +161,12 @@ public class User extends DateAudit {
         this.gender=signUpForm.getGender();
         this.age=signUpForm.getAge();
         this.password = encoded;
+        this.mbti = signUpForm.getMbti();
+        this.major = signUpForm.getMajor();
+        this.universeName = signUpForm.getUniverseName();
+        this.universeCertiImg = signUpForm.getUniverseCertiImg();
+        this.profileImg = signUpForm.getProfileImg();
+        this.introduce = signUpForm.getIntroduce();
     }
 
 

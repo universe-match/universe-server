@@ -1,6 +1,8 @@
 package com.univer.universerver.source.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +20,13 @@ public class UploadController {
     private S3Uploader s3Uploader;
     
 	@PostMapping("/user/image")
-    public ResponseEntity<String> upload(@RequestParam("image") MultipartFile multipartFile) throws IOException {
-        String imgUrl = s3Uploader.upload(multipartFile, "user");
-		return ResponseEntity.ok(imgUrl);
+    public ResponseEntity<Map<String,String>> upload(@RequestParam("image") MultipartFile multipartFile) throws IOException {
+        
+		Map<String,String> map=new HashMap<String, String>();
+		String imgUrl = s3Uploader.upload(multipartFile, "user");
+		map.put("imgUrl",imgUrl);
+       
+		return ResponseEntity.ok(map);
 
     }
 }

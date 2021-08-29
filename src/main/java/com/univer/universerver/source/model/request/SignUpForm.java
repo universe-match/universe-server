@@ -27,6 +27,19 @@ public class SignUpForm {
     private String gender;
 
     private String age;
+    
+    private String universeName;
+    
+    private String major;
+
+    private String profileImg;
+
+    private String universeCertiImg;
+    
+    private String mbti;
+    
+    private String introduce;
+
 
     @NotBlank
     @Size(min = 6, max = 40)
