@@ -15,7 +15,9 @@ public enum ErrorCode {
 	MATCHROOM_INPEOPLE_DUPLICATION(400,"USER-ERR-400","이미 방에 참여되어있습니다"),
 	MATCHROOM_LIMIT_EXCEED(400,"USER-ERR-400","방 인원수가 초과되었습니다"),
 	MATCHING_ROOMMASTER_DUPLICATION(400,"USER-ERR-400","방의 방장이라 입장이 불가능합니다"),
-	NOT_LOGIN(400,"USER-ERR-400","먼저 로그인을 해주세요");
+	NOT_LOGIN(400,"USER-ERR-400","먼저 로그인을 해주세요"),
+	ACCESS_DENIED(400,"USER-ERR-400","접근이 불가능합니다"),
+	ERR_ID_PASSWORD(400,"USER-ERR-400","아이디 또는 비밀번호가 틀렸습니다.");
 	
     private int status;
     private String errorCode;
