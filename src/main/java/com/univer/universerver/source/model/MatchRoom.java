@@ -48,6 +48,8 @@ public class MatchRoom extends DateAudit{
     private String fromDate;
     @Column(name="to_date")
     private String toDate;
+    
+    
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_id")
 	private User user;

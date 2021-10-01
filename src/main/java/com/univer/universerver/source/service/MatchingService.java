@@ -62,5 +62,39 @@ public class MatchingService {
 			}
 		}
 	}
+	public Matching insertInvitedPeople(long mId, long friend) {
+		
+		Optional<User> user= userRepository.findById(friend);
+		
+		Optional<MatchRoom> matchRoomD = matchRoomRepository.findById(mId);
+
+//		if(matchRoomD.get().getUser().getId()==user.get().getId()) {
+//			throw new UserException(ErrorCode.MATCHING_ROOMMASTER_DUPLICATION);
+//		}
+		
+		long matchingCnt =matchingRepository.countByMatchRoom(matchRoomD.get());
+		
+		if(matchingCnt+1>matchRoomD.get().getPeopleLimit()) {
+			throw new UserException(ErrorCode.MATCHROOM_LIMIT_EXCEED);
+		}
+
+		
+		boolean inPeople = matchingRepository.existsByUser(user.get());
+		
+		if(inPeople) {
+			throw new UserException(ErrorCode.MATCHROOM_INPEOPLE_DUPLICATION);
+		}else {
+			
+			MatchRoom matchRoom = new MatchRoom();
+			matchRoom.setId(mId);
+			
+			Matching matching = new Matching();
+			matching.setMatchRoom(matchRoom);
+			matching.setUser(user.get());
+			matching.setAgree('N');
+			return matchingRepository.save(matching);		
+		}
+		
+	}
 
 }

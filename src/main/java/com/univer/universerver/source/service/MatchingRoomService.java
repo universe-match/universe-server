@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.deser.DataFormatReaders.Match;
 import com.univer.universerver.source.common.response.ErrorCode;
 import com.univer.universerver.source.common.response.exception.MatchRoomDuplicateException;
 import com.univer.universerver.source.common.response.exception.UserException;
@@ -22,6 +23,8 @@ public class MatchingRoomService {
 	private MatchRoomRepository matchRoomRepository;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private MatchingService matchingService;
 	
 	public MatchRoom makeGroup(MatchroomReq matchroomReq, Principal principal) {
 		
@@ -43,7 +46,15 @@ public class MatchingRoomService {
 		matchroom.setFromDate(matchroomReq.getFromDate());
 		matchroom.setToDate(matchroomReq.getToDate());
 		matchroom.setUser(user.get());
-		return matchRoomRepository.save(matchroom);
+		
+		MatchRoom rtnMatchRoom = matchRoomRepository.save(matchroom);
+		if(matchroomReq.getFriends().length>0) {
+			for(long friend:matchroomReq.getFriends()) {
+				matchingService.insertInvitedPeople(rtnMatchRoom.getId(), friend);
+			}	
+		}
+		
+		return rtnMatchRoom;
 	}
 
 }

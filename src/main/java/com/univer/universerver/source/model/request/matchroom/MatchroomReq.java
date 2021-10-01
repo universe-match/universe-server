@@ -20,4 +20,6 @@ public class MatchroomReq {
 	private String fromDate;
 	
 	private String toDate;
+	
+	private long[] friends;
 }

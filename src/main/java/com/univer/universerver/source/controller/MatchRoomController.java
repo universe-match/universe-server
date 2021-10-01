@@ -28,6 +28,7 @@ public class MatchRoomController {
 	@PostMapping
     public ResponseEntity<MatchroomDTO> registerMatchRoom(@RequestBody MatchroomReq matchroomReq,Principal principal) {
 		MatchRoom matchRoom = matchRoomService.makeGroup(matchroomReq,principal);
+		
 		return ResponseEntity.ok(new MatchroomDTO(matchRoom));
     }
 
