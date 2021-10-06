@@ -27,6 +27,14 @@ public class UploadController {
 		map.put("imgUrl",imgUrl);
        
 		return ResponseEntity.ok(map);
-
     }
+	@PostMapping("/user/certi/image")
+	public ResponseEntity<Map<String,String>> uploadCerti(@RequestParam("image") MultipartFile multipartFile) throws IOException {
+
+		Map<String,String> map=new HashMap<String, String>();
+		String imgUrl = s3Uploader.upload(multipartFile, "certification");
+		map.put("imgUrl",imgUrl);
+
+		return ResponseEntity.ok(map);
+	}
 }

@@ -14,7 +14,7 @@ public class MatchroomDTO {
     
 	private String content;
     
-	private char groupKind;
+	private String groupKind;
     
 	private String place;
     

@@ -9,7 +9,7 @@ public class MatchroomReq {
     
 	private String content;
     
-	private char groupKind;
+	private String groupKind;
     
 	private String place;
     

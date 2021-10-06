@@ -1,14 +1,6 @@
 package com.univer.universerver.source.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -17,6 +9,9 @@ import com.univer.universerver.source.utils.DateAudit;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "matchroom")
@@ -37,7 +32,7 @@ public class MatchRoom extends DateAudit{
     @Column(name="content")
     private String content;
     @Column(name="group_kind")
-    private char groupkind;
+    private String groupkind;
     @Column(name="place")
     private String place;
     @Column(name="people_limit")
@@ -53,5 +48,8 @@ public class MatchRoom extends DateAudit{
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_id")
 	private User user;
+
+    @OneToMany(orphanRemoval=true,mappedBy = "matchRoom")
+    private List<Matching> matchingList=new ArrayList<Matching>();
     
 }

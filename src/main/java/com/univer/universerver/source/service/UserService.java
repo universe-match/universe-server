@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import com.univer.universerver.source.model.UserImage;
+import com.univer.universerver.source.repository.UserImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,19 +19,23 @@ import com.univer.universerver.source.model.request.SignUpForm;
 import com.univer.universerver.source.repository.RoleRepository;
 import com.univer.universerver.source.repository.UserRepository;
 import com.univer.universerver.source.utils.RoleName;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-
+@Transactional
 public class UserService {
 
     @Autowired
-    PasswordEncoder encoder;
+    private PasswordEncoder encoder;
 
     @Autowired
-    RoleRepository roleRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserImageRepository userImageRepository;
 
     public void registerUser (SignUpForm signUpForm)
     {
@@ -60,8 +66,18 @@ public class UserService {
             }
         });
 
+//        for(int i=0;i<signUpForm.getUserImages().size();i++){
+//            System.out.println(signUpForm.getUserImages().get(i));
+//        }
+        User rtnUser = userRepository.save(user);
+        for(int i=0;i<signUpForm.getUserImages().length;i++){
+            UserImage userImage = new UserImage();
+            userImage.setProfileImg(signUpForm.getUserImages()[i]);
+            userImage.setUser(rtnUser);
+            userImageRepository.save(userImage);
+        }
         user.setRoles(roles);
-        userRepository.save(user);
+
     }
 
     public Optional<User> findUserId(long id) {

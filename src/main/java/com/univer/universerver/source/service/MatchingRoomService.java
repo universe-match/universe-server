@@ -1,9 +1,15 @@
 package com.univer.universerver.source.service;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
+import com.univer.universerver.source.model.response.MatchRoomResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.deser.DataFormatReaders.Match;
@@ -15,8 +21,10 @@ import com.univer.universerver.source.model.User;
 import com.univer.universerver.source.model.request.matchroom.MatchroomReq;
 import com.univer.universerver.source.repository.MatchRoomRepository;
 import com.univer.universerver.source.repository.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class MatchingRoomService {
 
 	@Autowired
@@ -25,9 +33,10 @@ public class MatchingRoomService {
 	private UserRepository userRepository;
 	@Autowired
 	private MatchingService matchingService;
+	@Autowired
+	private ChatRoomService chatRoomService;
 	
 	public MatchRoom makeGroup(MatchroomReq matchroomReq, Principal principal) {
-		
 		if(principal==null) {
 			throw new UserException(ErrorCode.NOT_LOGIN);
 		}
@@ -48,6 +57,8 @@ public class MatchingRoomService {
 		matchroom.setUser(user.get());
 		
 		MatchRoom rtnMatchRoom = matchRoomRepository.save(matchroom);
+		matchingService.insertInvitedPeople(rtnMatchRoom.getId(), user.get().getId());
+		chatRoomService.insertChatRoomPeople(rtnMatchRoom.getId());
 		if(matchroomReq.getFriends().length>0) {
 			for(long friend:matchroomReq.getFriends()) {
 				matchingService.insertInvitedPeople(rtnMatchRoom.getId(), friend);
@@ -57,4 +68,9 @@ public class MatchingRoomService {
 		return rtnMatchRoom;
 	}
 
+    public Page<MatchRoom> getMatchRoomList(Pageable pageable) {
+		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+		pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
+		return matchRoomRepository.findAll(pageable);
+    }
 }

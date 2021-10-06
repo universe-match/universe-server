@@ -1,22 +1,12 @@
 package com.univer.universerver.source.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -94,8 +84,8 @@ public class User extends DateAudit {
     @Column(name="major")
     private String major;//전
     
-    @Column(name="profile_img")
-    private String profileImg;//회원사
+//    @Column(name="profile_img")
+//    private String profileImg;//회원사
     
     @Column(name="universe_certiimg")
     private String universeCertiImg;//학생
@@ -144,6 +134,8 @@ public class User extends DateAudit {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @OneToMany(orphanRemoval=true,mappedBy = "user")
+    private List<UserImage> userImages=new ArrayList<UserImage>();
     
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
@@ -165,7 +157,6 @@ public class User extends DateAudit {
         this.major = signUpForm.getMajor();
         this.universeName = signUpForm.getUniverseName();
         this.universeCertiImg = signUpForm.getUniverseCertiImg();
-        this.profileImg = signUpForm.getProfileImg();
         this.introduce = signUpForm.getIntroduce();
     }
 

@@ -37,4 +37,8 @@ public class Matching extends DateAudit{
     @Column(name="agree")
     @ColumnDefault("N") 
     private char agree;
+
+    @Column(name="master_yn")
+    @ColumnDefault("N")
+    private char masterYn;
 }

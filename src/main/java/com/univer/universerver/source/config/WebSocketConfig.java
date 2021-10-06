@@ -14,6 +14,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
     private ChatHandler chatHandler;
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(chatHandler, "/ws/chat").setAllowedOrigins("*");
+        registry.addHandler(chatHandler, "/ws/chat/{chatRoomId}").setAllowedOrigins("*");
     }
 }  

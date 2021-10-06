@@ -1,11 +1,13 @@
 package com.univer.universerver.source.model.request;
 
+import com.univer.universerver.source.model.UserImage;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Set;
 
 @Getter
@@ -32,7 +34,9 @@ public class SignUpForm {
     
     private String major;
 
-    private String profileImg;
+//    private String profileImg;
+
+    private String[] userImages;
 
     private String universeCertiImg;
     
