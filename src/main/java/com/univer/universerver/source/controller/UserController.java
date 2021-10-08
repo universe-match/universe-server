@@ -1,11 +1,15 @@
 package com.univer.universerver.source.controller;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServlet;
 import javax.validation.Valid;
 
+import com.univer.universerver.source.model.User;
+import com.univer.universerver.source.model.response.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -115,6 +119,12 @@ public class UserController extends HttpServlet {
 		}
 		
 	}
+    @ApiOperation(value="내정보조회",notes="내정보조회")
+    @GetMapping("/myinfo")
+    public ResponseEntity<?> myInfo(Principal principal) {
+        Optional<User> user = userService.findMyUserInfo(principal.getName());
+        return ResponseEntity.ok(new UserResponse(user.get()));
+    }
 
     @ApiOperation(value="회원가입",notes="회원가입")
     @PostMapping("/signup")

@@ -94,4 +94,8 @@ public class UserService {
         user.setLastaccesstime(dateTime);
         userRepository.save(user);
     }
+
+    public Optional<User> findMyUserInfo(String userId) {
+        return userRepository.findByUserid(userId);
+    }
 }

@@ -3,8 +3,12 @@ package com.univer.universerver.source.config;
 import com.univer.universerver.source.common.response.ErrorCode;
 import com.univer.universerver.source.common.response.exception.CommonException;
 import com.univer.universerver.source.model.ChatRoom;
+import com.univer.universerver.source.model.Message;
+import com.univer.universerver.source.model.MessageType;
 import com.univer.universerver.source.repository.ChatRoomRepository;
+import com.univer.universerver.source.service.MessageService;
 import com.univer.universerver.source.utils.JsonUtil;
+import com.univer.universerver.source.utils.LocalDateTimeUtil;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -48,6 +52,8 @@ public class ChatHandler extends TextWebSocketHandler {
     }
     @Autowired
     private ChatRoomRepository chatRoomRepository;
+    @Autowired
+    private MessageService messageService;
 
     public static final Map<Long, Map<String, WebSocketSession>> chatroomMap = new HashMap<>();
 
@@ -115,7 +121,19 @@ public class ChatHandler extends TextWebSocketHandler {
                 wss.sendMessage(new TextMessage(object.toJSONString()));
             }
 
-
+            Message msg = Message.builder()
+                    .type(MessageType.MESSAGE)
+                    .chatroomId(chatroomId)
+                    .sessionId(session.getId())
+                    .username((String) object.get(USERNAME))    // 보낸 사람
+                    .message((String) object.get(MESSAGE))
+                    //.sentAt(LocalDateTime.now())
+                    .sentAt(LocalDateTimeUtil.getDateTimeToString(LocalDateTime.now()))
+                    .checked(sessionMap.size() == 2 ? true : false)
+                    .build();
+            
+            log.info(msg.toString());
+            messageService.saveMessage(msg);
 
         }
     }
