@@ -23,6 +23,7 @@ public class Message {
     private MessageType type;
     private Long chatroomId;
     private String sessionId;
+    private long userKey;
     private String username;
     private String message;
     // private LocalDateTime sentAt;
@@ -31,10 +32,11 @@ public class Message {
     private boolean checked;
 
     @Builder
-    public Message(MessageType type, Long chatroomId, String sessionId, String username, String message, String sentAt, boolean checked) {
+    public Message(MessageType type, Long chatroomId, String sessionId,long userKey, String username, String message, String sentAt, boolean checked) {
         this.type = type;
         this.chatroomId = chatroomId;
         this.sessionId = sessionId;
+        this.userKey = userKey;
         this.username = username;
         this.message = message;
         this.sentAt = sentAt;

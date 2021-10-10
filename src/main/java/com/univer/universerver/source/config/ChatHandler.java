@@ -42,6 +42,7 @@ public class ChatHandler extends TextWebSocketHandler {
     private static final String TYPE = "type";
     private static final String SESSION_ID = "sessionId";
     private static final String CHATROOM_ID = "chatroomId";
+    private static final long USER_KEY = 0;
     private static final String USERNAME = "username";
     private static final String MESSAGE = "message";
 
@@ -125,7 +126,8 @@ public class ChatHandler extends TextWebSocketHandler {
                     .type(MessageType.MESSAGE)
                     .chatroomId(chatroomId)
                     .sessionId(session.getId())
-                    .username((String) object.get(USERNAME))    // 보낸 사람
+                    .userKey((long) object.get("userKey"))
+                     .username((String) object.get(USERNAME))   // 보낸 사람
                     .message((String) object.get(MESSAGE))
                     //.sentAt(LocalDateTime.now())
                     .sentAt(LocalDateTimeUtil.getDateTimeToString(LocalDateTime.now()))

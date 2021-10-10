@@ -26,4 +26,8 @@ public class MessageService {
     public List<Message> getMessages() {
         return messageRepository.findAll();
     }
+
+    public List<Message> selectChatroomInfo(long id) {
+        return messageRepository.findByChatroomId(id);
+    }
 }

@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 @Getter
 public class UserResponse {
 
+    private long id;
+
     private String nickname;
 
     private String age;
@@ -25,6 +27,7 @@ public class UserResponse {
     private List<UserImageResponse> userImages = new ArrayList<UserImageResponse>();
 
     public UserResponse(User user){
+        this.id = user.getId();
         this.nickname = user.getNickname();
         this.age = user.getAge();
         this.mbti = user.getMbti();
