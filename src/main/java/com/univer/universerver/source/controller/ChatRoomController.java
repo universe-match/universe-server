@@ -35,7 +35,8 @@ public class ChatRoomController {
     @GetMapping
     public ResponseEntity<?> getMatchRoomList(Pageable pageable, Principal principal) {
 
-        List<ChatRoomResponse> chatRoomList= chatRoomService.selectChatRoomList();
+        String userId = principal.getName();
+        List<ChatRoomResponse> chatRoomList= chatRoomService.selectChatRoomList(userId);
         return ResponseEntity.ok(chatRoomList);
 
     }
