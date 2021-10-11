@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
+import com.univer.universerver.source.model.ChatRoom;
 import com.univer.universerver.source.model.response.MatchRoomResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,6 +36,8 @@ public class MatchingRoomService {
 	private MatchingService matchingService;
 	@Autowired
 	private ChatRoomService chatRoomService;
+	@Autowired
+	private ChatRoomUserService chatRoomUserService;
 	
 	public MatchRoom makeGroup(MatchroomReq matchroomReq, Principal principal) {
 		if(principal==null) {
@@ -58,7 +61,9 @@ public class MatchingRoomService {
 		
 		MatchRoom rtnMatchRoom = matchRoomRepository.save(matchroom);
 		matchingService.insertInvitedPeople(rtnMatchRoom.getId(), user.get().getId());
-		chatRoomService.insertChatRoomPeople(rtnMatchRoom.getId());
+		ChatRoom chatRoom = chatRoomService.insertChatRoomPeople(rtnMatchRoom.getId());
+		chatRoomUserService.insertChatRoomUser(chatRoom,user.get());
+//		chatRoomUserService.insertChatRoomUser()
 		if(matchroomReq.getFriends().length>0) {
 			for(long friend:matchroomReq.getFriends()) {
 				matchingService.insertInvitedPeople(rtnMatchRoom.getId(), friend);
@@ -68,9 +73,9 @@ public class MatchingRoomService {
 		return rtnMatchRoom;
 	}
 
-    public Page<MatchRoom> getMatchRoomList(Pageable pageable) {
+    public Page<MatchRoom> getMatchRoomList(Pageable pageable,Principal principal) {
 		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
 		pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
-		return matchRoomRepository.findAll(pageable);
+		return matchRoomRepository.findAllByMatchRoomsChatRoomUsersUserUserid(pageable,principal.getName());
     }
 }

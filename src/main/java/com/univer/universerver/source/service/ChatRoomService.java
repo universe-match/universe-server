@@ -22,14 +22,14 @@ public class ChatRoomService {
     @Autowired
     private UserRepository userRepository;
 
-    public void insertChatRoomPeople(Long matchRoomId) {
+    public ChatRoom insertChatRoomPeople(Long matchRoomId) {
 
         MatchRoom matchRoom = new MatchRoom();
         matchRoom.setId(matchRoomId);
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.setMatchRoom(matchRoom);
 
-        chatRoomRepository.save(chatRoom);
+        return chatRoomRepository.save(chatRoom);
     }
 
     public List<ChatRoomResponse> selectChatRoomList(String userId) {

@@ -21,24 +21,17 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Matching extends DateAudit{
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_id")
 	private User user;
-	
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "matchroom_id")
+	@JoinColumn(name = "matchRoom_id")
 	private MatchRoom matchRoom;
-	
     @Column(name="agree")
-    @ColumnDefault("N") 
     private char agree;
-
     @Column(name="master_yn")
-    @ColumnDefault("N")
     private char masterYn;
 }

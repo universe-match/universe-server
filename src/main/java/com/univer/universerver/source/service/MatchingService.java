@@ -42,7 +42,7 @@ public class MatchingService {
 			
 			long matchingCnt =matchingRepository.countByMatchRoom(matchRoomD.get());
 			
-			if(matchingCnt+1>matchRoomD.get().getPeopleLimit()) {
+			if(matchingCnt+1>=matchRoomD.get().getPeopleLimit()) {
 				throw new UserException(ErrorCode.MATCHROOM_LIMIT_EXCEED);
 			}
 			boolean inPeople = matchingRepository.existsByUser(user.get());
@@ -74,7 +74,7 @@ public class MatchingService {
 		
 		long matchingCnt =matchingRepository.countByMatchRoom(matchRoomD.get());
 		
-		if(matchingCnt+1>matchRoomD.get().getPeopleLimit()) {
+		if(matchingCnt+1>=matchRoomD.get().getPeopleLimit()) {
 			throw new UserException(ErrorCode.MATCHROOM_LIMIT_EXCEED);
 		}
 

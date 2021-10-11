@@ -83,14 +83,10 @@ public class User extends DateAudit {
     
     @Column(name="major")
     private String major;//전
-    
-//    @Column(name="profile_img")
-//    private String profileImg;//회원사
-    
+
     @Column(name="universe_certiimg")
     private String universeCertiImg;//학생
-    
-    
+
     @NotBlank
     @Size(min=6, max = 100)
     @JsonIgnore
@@ -136,7 +132,10 @@ public class User extends DateAudit {
 
     @OneToMany(orphanRemoval=true,mappedBy = "user")
     private List<UserImage> userImages=new ArrayList<UserImage>();
-    
+    @ManyToOne
+    @JoinColumn(name = "chatRoomUser_id")
+    private ChatRoomUser chatRoomUser;
+
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }

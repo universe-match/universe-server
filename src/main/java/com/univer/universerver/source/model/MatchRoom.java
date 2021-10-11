@@ -43,13 +43,11 @@ public class MatchRoom extends DateAudit{
     private String fromDate;
     @Column(name="to_date")
     private String toDate;
-    
-    
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_id")
 	private User user;
-
     @OneToMany(orphanRemoval=true,mappedBy = "matchRoom")
     private List<Matching> matchingList=new ArrayList<Matching>();
-    
+    @OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "matchRoom")
+    private List<ChatRoom> matchRooms;
 }

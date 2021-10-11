@@ -32,13 +32,12 @@ public class MatchRoomController {
 	@PostMapping
     public ResponseEntity<MatchroomDTO> registerMatchRoom(@RequestBody MatchroomReq matchroomReq,Principal principal) {
 		MatchRoom matchRoom = matchRoomService.makeGroup(matchroomReq,principal);
-		
 		return ResponseEntity.ok(new MatchroomDTO(matchRoom));
     }
 	@ApiOperation(value="그룹리스트 조회",notes="그룹리스트 조회")
 	@GetMapping
 	public ResponseEntity<?> getMatchRoomList(Pageable pageable, Principal principal) {
-		Page<MatchRoom> matchRoom = matchRoomService.getMatchRoomList(pageable);
+		Page<MatchRoom> matchRoom = matchRoomService.getMatchRoomList(pageable,principal);
 		List<MatchRoomResponse> matchRoomRes = matchRoom
 												.stream()
 												.map(item->new MatchRoomResponse(item))
