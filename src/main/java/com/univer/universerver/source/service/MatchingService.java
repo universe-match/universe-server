@@ -3,6 +3,8 @@ package com.univer.universerver.source.service;
 import java.security.Principal;
 import java.util.Optional;
 
+import com.univer.universerver.source.model.ChatRoom;
+import com.univer.universerver.source.repository.ChatRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +28,10 @@ public class MatchingService {
 	private UserRepository userRepository;
 	@Autowired
 	private MatchRoomRepository matchRoomRepository;
-	
+	@Autowired
+	private ChatRoomRepository chatRoomRepository;
+	@Autowired
+	private ChatRoomUserService chatRoomUserService;
 	public Matching insertPeople(MatchingReq matchingReq, Principal principal) {
 		
 		if(principal==null) {
@@ -42,7 +47,7 @@ public class MatchingService {
 			
 			long matchingCnt =matchingRepository.countByMatchRoom(matchRoomD.get());
 			
-			if(matchingCnt+1>=matchRoomD.get().getPeopleLimit()) {
+			if(matchingCnt+1>matchRoomD.get().getPeopleLimit()) {
 				throw new UserException(ErrorCode.MATCHROOM_LIMIT_EXCEED);
 			}
 			boolean inPeople = matchingRepository.existsByUser(user.get());
@@ -58,6 +63,8 @@ public class MatchingService {
 				matching.setMatchRoom(matchRoom);
 				matching.setUser(user.get());
 				matching.setAgree('N');
+				ChatRoom chatRoom = chatRoomRepository.findByMatchRoom(matchRoom);
+				chatRoomUserService.insertChatRoomUser(chatRoom,user.get());
 				return matchingRepository.save(matching);		
 			}
 		}
