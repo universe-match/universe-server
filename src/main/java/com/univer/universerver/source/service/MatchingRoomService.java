@@ -76,6 +76,6 @@ public class MatchingRoomService {
     public Page<MatchRoom> getMatchRoomList(Pageable pageable,Principal principal) {
 		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
 		pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
-		return matchRoomRepository.findAllByMatchRoomsChatRoomUsersUserUserid(pageable,principal.getName());
+		return matchRoomRepository.findAll(pageable);
     }
 }

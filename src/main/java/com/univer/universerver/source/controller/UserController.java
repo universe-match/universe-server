@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.validation.Valid;
 
 import com.univer.universerver.source.model.User;
+import com.univer.universerver.source.model.request.UserRequest;
 import com.univer.universerver.source.model.response.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,11 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.univer.universerver.source.common.response.ErrorCode;
 import com.univer.universerver.source.common.response.exception.UserException;
@@ -124,6 +121,13 @@ public class UserController extends HttpServlet {
     public ResponseEntity<?> myInfo(Principal principal) {
         Optional<User> user = userService.findMyUserInfo(principal.getName());
         return ResponseEntity.ok(new UserResponse(user.get()));
+    }
+    @ApiOperation(value="내정보수정",notes="내정보수정")
+    @PatchMapping("/myinfo/update")
+    public ResponseEntity<?> myInfoUpdate(Principal principal,@RequestBody  UserRequest userRequest) {
+//        Optional<User> user = userService.findMyUserInfo(principal.getName());
+        System.out.println(userRequest);
+        return ResponseEntity.ok(userRequest);
     }
 
     @ApiOperation(value="회원가입",notes="회원가입")
