@@ -116,6 +116,12 @@ public class UserController extends HttpServlet {
 		}
 		
 	}
+    @ApiOperation(value="타인정보조회",notes="타인정보조회")
+    @GetMapping("/otherinfo/{id}")
+    public ResponseEntity<?> myInfo(Principal principal,@PathVariable(name = "id") long id) {
+        Optional<User> user = userService.findUserId(id);
+        return ResponseEntity.ok(new UserResponse(user.get()));
+    }
     @ApiOperation(value="내정보조회",notes="내정보조회")
     @GetMapping("/myinfo")
     public ResponseEntity<?> myInfo(Principal principal) {

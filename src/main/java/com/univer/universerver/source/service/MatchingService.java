@@ -86,22 +86,30 @@ public class MatchingService {
 		}
 
 		
-		boolean inPeople = matchingRepository.existsByUser(user.get());
+//		boolean inPeople = matchingRepository.existsByUser(user.get());
 		
-		if(inPeople) {
-			throw new UserException(ErrorCode.MATCHROOM_INPEOPLE_DUPLICATION);
-		}else {
-			
-			MatchRoom matchRoom = new MatchRoom();
-			matchRoom.setId(mId);
-			
-			Matching matching = new Matching();
-			matching.setMatchRoom(matchRoom);
-			matching.setUser(user.get());
-			matching.setAgree('N');
-			return matchingRepository.save(matching);		
-		}
-		
+//		if(inPeople) {
+//			throw new UserException(ErrorCode.MATCHROOM_INPEOPLE_DUPLICATION);
+//		}else {
+//
+//			MatchRoom matchRoom = new MatchRoom();
+//			matchRoom.setId(mId);
+//
+//			Matching matching = new Matching();
+//			matching.setMatchRoom(matchRoom);
+//			matching.setUser(user.get());
+//			matching.setAgree('N');
+//			return matchingRepository.save(matching);
+//		}
+		MatchRoom matchRoom = new MatchRoom();
+		matchRoom.setId(mId);
+
+		Matching matching = new Matching();
+		matching.setMatchRoom(matchRoom);
+		matching.setUser(user.get());
+		matching.setAgree('N');
+		return matchingRepository.save(matching);
+
 	}
 
 }

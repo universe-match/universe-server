@@ -22,7 +22,11 @@ public class UserResponse {
 
     private String universeName;
 
+    private String major;
+
     private String profileImg;
+
+    private String introduce;
 
     private List<UserImageResponse> userImages = new ArrayList<UserImageResponse>();
 
@@ -32,6 +36,8 @@ public class UserResponse {
         this.age = user.getAge();
         this.mbti = user.getMbti();
         this.universeName = user.getUniverseName();
+        this.introduce = user.getIntroduce();
+        this.major = user.getMajor();
         this.userImages = user.getUserImages().stream().map(item->new UserImageResponse(item)).collect(Collectors.toList());
 //        this.profileImg = user.getProfileImg();
     }
