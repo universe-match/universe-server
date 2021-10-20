@@ -36,14 +36,14 @@ public class MatchRoomController {
     }
 	@ApiOperation(value="그룹리스트 조회",notes="그룹리스트 조회")
 	@GetMapping
-	public ResponseEntity<?> getMatchRoomList(Pageable pageable, Principal principal) {
-		Page<MatchRoom> matchRoom = matchRoomService.getMatchRoomList(pageable,principal);
+	public ResponseEntity<?> getMatchRoomList(Principal principal) {
+		List<MatchRoom> matchRoom = matchRoomService.getMatchRoomList(principal);
 		List<MatchRoomResponse> matchRoomRes = matchRoom
 												.stream()
 												.map(item->new MatchRoomResponse(item))
 												.collect(Collectors.toList());
-		Page<MatchRoomResponse> rtnMatchRoom = new PageImpl<>(matchRoomRes);
-		return ResponseEntity.ok(rtnMatchRoom);
+//		Page<MatchRoomResponse> rtnMatchRoom = new PageImpl<>(matchRoomRes);
+		return ResponseEntity.ok(matchRoomRes);
 
 	}
 }

@@ -19,4 +19,7 @@ public interface MatchingRepository extends JpaRepository<Matching,Long>{
 
 	long countByMatchRoom(MatchRoom matchRoom);
 
+	boolean existsByUserAndMatchRoomId(User user, long mid);
+
+    void deleteByMatchRoomIdAndUserId(long matchRoomId, Long id);
 }
