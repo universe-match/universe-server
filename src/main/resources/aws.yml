@@ -1,10 +1,10 @@
 cloud:
   aws:
     credentials:
-      accessKey: AKIA3MGT2LL6JOGZPQW7
-      secretKey: 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
+      accessKey:
+      secretKey:
     s3:
-      bucket: universematch
+      bucket: 
     region:
       static: ap-northeast-2
     stack:
