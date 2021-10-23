@@ -11,17 +11,13 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.NaturalId;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.univer.universerver.source.model.request.SignUpForm;
 import com.univer.universerver.source.utils.DateAudit;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 
 @Entity
@@ -35,6 +31,7 @@ import lombok.NoArgsConstructor;
 })
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends DateAudit {
@@ -123,7 +120,10 @@ public class User extends DateAudit {
     @Column(name="point")
     @ColumnDefault("0")
     private long point;
-
+    @Column(name="delete_yn" ,columnDefinition = "varchar(1) default 'N'")
+    private String deleteYn="N";
+    @Column(name="noti_yn" ,columnDefinition = "varchar(1) default 'N'")
+    private String notiYn;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

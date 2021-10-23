@@ -2,6 +2,7 @@ package com.univer.universerver.source.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -136,6 +137,19 @@ public class UserController extends HttpServlet {
         return ResponseEntity.ok(userRequest);
     }
 
+    @ApiOperation(value="회원탈퇴",notes="회원탈퇴")
+    @DeleteMapping("/myinfo/delete")
+    public ResponseEntity<?> myInfoDelete(Principal principal) {
+        userService.myInfoDelete(principal.getName());
+        return ResponseEntity.ok("서비스를 이용할수없으며 일주일 뒤 완전 삭제 됩니다.");
+    }
+    @ApiOperation(value="알림여부체크",notes="알림여부체크")
+    @PatchMapping("/myinfo/noti")
+    public ResponseEntity<?> myInfoDelete(Principal principal,@RequestBody Map<String, String> param) {
+        String noti = param.get("noti");
+        long notiNumber = userService.myInfoNotiUpdate(principal.getName(),noti);
+        return ResponseEntity.ok(notiNumber);
+    }
     @ApiOperation(value="회원가입",notes="회원가입")
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@RequestBody SignUpForm signUpRequest) {

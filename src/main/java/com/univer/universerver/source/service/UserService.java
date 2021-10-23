@@ -36,6 +36,8 @@ public class UserService {
 
     @Autowired
     private UserImageRepository userImageRepository;
+    @Autowired
+    private UserService userService;
 
     public void registerUser (SignUpForm signUpForm)
     {
@@ -97,5 +99,21 @@ public class UserService {
 
     public Optional<User> findMyUserInfo(String userId) {
         return userRepository.findByUserid(userId);
+    }
+
+    public void myInfoDelete(String userName) {
+        Optional<User> user = userService.findMyUserInfo(userName);
+        user.get().setDeleteYn("Y");
+        userRepository.save(user.get());
+    }
+
+    public long myInfoNotiUpdate(String userName, String noti) {
+        Optional<User> user = userService.findMyUserInfo(userName);
+        if(noti.equals("0")){
+            user.get().setNotiYn("N");
+        }else{
+            user.get().setNotiYn("Y");
+        }
+        return Integer.parseInt(noti);
     }
 }
