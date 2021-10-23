@@ -107,6 +107,8 @@ public class UserController extends HttpServlet {
 					.map(item -> item.getAuthority())
 					.collect(Collectors.toList());
 
+			userService.createFcmToken(authentication.getName(),loginRequest.getFcmToken());
+
 			return ResponseEntity.ok(new JwtResponse(jwt, 
 													 userDetails.getId(), 
 													 userDetails.getUsername(), 

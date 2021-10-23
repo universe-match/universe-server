@@ -7,6 +7,9 @@ import java.util.Set;
 
 import com.univer.universerver.source.model.UserImage;
 import com.univer.universerver.source.repository.UserImageRepository;
+import com.univer.universerver.source.security.jwt.JwtAuthTokenFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,6 +41,8 @@ public class UserService {
     private UserImageRepository userImageRepository;
     @Autowired
     private UserService userService;
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthTokenFilter.class);
+
 
     public void registerUser (SignUpForm signUpForm)
     {
@@ -115,5 +120,15 @@ public class UserService {
             user.get().setNotiYn("Y");
         }
         return Integer.parseInt(noti);
+    }
+
+
+    public void createFcmToken(String userName, String fcmToken) {
+        Optional<User> user = userService.findMyUserInfo(userName);
+        user.get().setFcmToken(fcmToken);
+        if(user.get().getFcmToken().equals(fcmToken)){
+            return;
+        }
+        userRepository.save(user.get());
     }
 }
