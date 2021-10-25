@@ -12,8 +12,9 @@ public class NotificationService {
 
     @Autowired
     AndroidPushNotificationsService androidPushNotificationsService;
-    public void sendNoti(String title,String content){
-        String notifications = AndroidPushPeriodicNotifications.PeriodicNotificationJson();
+
+    public void sendNoti(String nickName,String token,String title,String content){
+        String notifications = AndroidPushPeriodicNotifications.PeriodicNotificationJson(nickName,token,title,content);
         HttpHeaders resHeader = new HttpHeaders();
         resHeader.add("Content-Type", "application/json;charset=UTF-8");
         HttpEntity<String> request = new HttpEntity<>(notifications,resHeader);

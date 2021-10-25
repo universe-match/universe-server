@@ -29,15 +29,18 @@ public class Message {
     // private LocalDateTime sentAt;
     private String sentAt;
 
+    private String profileUrl;
+
     private boolean checked;
 
     @Builder
-    public Message(MessageType type, Long chatroomId, String sessionId,long userKey, String username, String message, String sentAt, boolean checked) {
+    public Message(MessageType type, Long chatroomId, String sessionId,long userKey, String username,String profileUrl, String message, String sentAt, boolean checked) {
         this.type = type;
         this.chatroomId = chatroomId;
         this.sessionId = sessionId;
         this.userKey = userKey;
         this.username = username;
+        this.profileUrl = profileUrl;
         this.message = message;
         this.sentAt = sentAt;
         this.checked = checked;

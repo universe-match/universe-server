@@ -21,7 +21,7 @@ public class ChatRoomUser {
     @JoinColumn(name = "user_id")
     private User user;
     @ManyToOne(optional = false)
-    @JoinColumn(name = "chatRoomUser_id")
+    @JoinColumn(name = "chatRoomUser_id",nullable = false)
     private ChatRoom chatRoomUser;
 
 }

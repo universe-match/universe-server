@@ -15,7 +15,7 @@ public class UserRequest {
     private long id;
     private String nickname;
     private String introduce;
-    private List<UserImageRequest> userImages=new ArrayList<>();
+    private String[] userImages;
 
 
 

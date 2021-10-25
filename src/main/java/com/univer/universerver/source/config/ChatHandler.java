@@ -6,6 +6,7 @@ import com.univer.universerver.source.model.ChatRoom;
 import com.univer.universerver.source.model.Message;
 import com.univer.universerver.source.model.MessageType;
 import com.univer.universerver.source.repository.ChatRoomRepository;
+import com.univer.universerver.source.service.ChatRoomService;
 import com.univer.universerver.source.service.MessageService;
 import com.univer.universerver.source.utils.JsonUtil;
 import com.univer.universerver.source.utils.LocalDateTimeUtil;
@@ -52,6 +53,8 @@ public class ChatHandler extends TextWebSocketHandler {
 //        this.repository = chatRoomRepository;
     }
     @Autowired
+    private ChatRoomService chatRoomService;
+    @Autowired
     private ChatRoomRepository chatRoomRepository;
     @Autowired
     private MessageService messageService;
@@ -95,17 +98,6 @@ public class ChatHandler extends TextWebSocketHandler {
     }
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-
-//        String payload = message.getPayload();
-//        log.info("payload : {}", payload);
-//
-//        ChatMessage chatMessage = objectMapper.readValue(payload, ChatMessage.class);
-//        System.out.println(chatMessage);
-        //ChatMessage chatMessage = objectMapper.readValue(payload, ChatMessage.class);
-//        ChatMessage chatMessage = objectMapper.readValue(payload, ChatMessage.class);
-//        ChatRoom chatRoom = repository.getChatRoom(chatMessage.getChatRoomId());
-//        chatRoom.handleMessage(session, chatMessage, objectMapper);
-
         String text = message.getPayload();
 
         JSONObject object = JsonUtil.parse(text);
@@ -127,6 +119,7 @@ public class ChatHandler extends TextWebSocketHandler {
                     .chatroomId(chatroomId)
                     .sessionId(session.getId())
                     .userKey((long) object.get("userKey"))
+                    .profileUrl((String)object.get("profileUrl"))
                      .username((String) object.get(USERNAME))   // 보낸 사람
                     .message((String) object.get(MESSAGE))
                     //.sentAt(LocalDateTime.now())
@@ -135,6 +128,7 @@ public class ChatHandler extends TextWebSocketHandler {
                     .build();
             
             log.info(msg.toString());
+            chatRoomService.sendMsg(chatroomId,(long) object.get("userKey"));
             messageService.saveMessage(msg);
 
         }

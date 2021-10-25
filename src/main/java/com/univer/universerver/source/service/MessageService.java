@@ -1,6 +1,8 @@
 package com.univer.universerver.source.service;
 
 import com.univer.universerver.source.model.Message;
+import com.univer.universerver.source.model.response.ChatRoomResponse;
+import com.univer.universerver.source.model.response.MessageResponse;
 import com.univer.universerver.source.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 @RequiredArgsConstructor
@@ -27,7 +30,11 @@ public class MessageService {
         return messageRepository.findAll();
     }
 
-    public List<Message> selectChatroomInfo(long id) {
-        return messageRepository.findByChatroomId(id);
+    public List<MessageResponse> selectChatroomInfo(long id) {
+        List<Message> message = messageRepository.findByChatroomId(id);
+        List<MessageResponse> msgRes = message.stream().map(item->new MessageResponse(item)).collect(Collectors.toList());
+        return msgRes;
     }
+
+
 }

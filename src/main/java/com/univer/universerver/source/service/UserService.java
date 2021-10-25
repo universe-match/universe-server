@@ -1,11 +1,13 @@
 package com.univer.universerver.source.service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 import com.univer.universerver.source.model.UserImage;
+import com.univer.universerver.source.model.request.UserRequest;
 import com.univer.universerver.source.repository.UserImageRepository;
 import com.univer.universerver.source.security.jwt.JwtAuthTokenFilter;
 import org.slf4j.Logger;
@@ -130,5 +132,32 @@ public class UserService {
             return;
         }
         userRepository.save(user.get());
+    }
+
+    public Optional<User> selectNickname(String nickName) {
+        return userRepository.findByNickname(nickName);
+    }
+
+    public Optional<User> checkUserId(String userId) {
+        return userRepository.findByUserid(userId);
+    }
+
+    public void updateUser(UserRequest userRequest) {
+        userImageRepository.deleteByUserId(userRequest.getId());
+        Optional<User> user = userRepository.findById(userRequest.getId());
+
+        Arrays.stream(userRequest.getUserImages()).forEach(imageUrl-> {
+
+            UserImage userImage = new UserImage();
+            userImage.setUser(user.get());
+            userImage.setProfileImg(imageUrl);
+            userImageRepository.save(userImage);
+        });
+        user.ifPresent(item->{
+
+            user.get().setNickname(userRequest.getNickname());
+            user.get().setIntroduce(userRequest.getIntroduce());
+            userRepository.save(user.get());
+        });
     }
 }

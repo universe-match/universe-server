@@ -65,7 +65,11 @@ public class MatchingService {
 				matching.setMatchRoom(matchRoom);
 				matching.setUser(user.get());
 				matching.setAgree('N');
+				matching.setMasterYn('N');
 				ChatRoom chatRoom = chatRoomRepository.findByMatchRoom(matchRoom);
+//				ChatRoom newChatRoom = new ChatRoom();
+//				newChatRoom.setMatchRoom(chatRoom.getMatchRoom());
+//				newChatRoom.setChatRoomUsers(newChatRoom.getChatRoomUsers());
 				chatRoomUserService.insertChatRoomUser(chatRoom,user.get());
 				return matchingRepository.save(matching);
 			}
@@ -81,7 +85,7 @@ public class MatchingService {
 //			return matchingRepository.save(matching);
 		}
 	}
-	public Matching insertInvitedPeople(long mId, long friend) {
+	public Matching insertInvitedPeople(long mId, long friend,char masterYn) {
 		
 		Optional<User> user= userRepository.findById(friend);
 		
@@ -120,6 +124,7 @@ public class MatchingService {
 		matching.setMatchRoom(matchRoom);
 		matching.setUser(user.get());
 		matching.setAgree('N');
+		matching.setMasterYn(masterYn);
 		return matchingRepository.save(matching);
 
 	}
@@ -128,7 +133,10 @@ public class MatchingService {
 		Optional<ChatRoom> chatRoom = chatRoomRepository.findById(chatroomId);
 		long matchRoomId = chatRoom.get().getMatchRoom().getId();
 		Optional<User> user= userRepository.findByUserid(principal.getName());
+
 		matchingRepository.deleteByMatchRoomIdAndUserId(matchRoomId,user.get().getId());
-//		chatRoomRepository.deleteById(chatroomId);
+		chatRoomUserService.deleteUser(user.get(),chatRoom.get().getId());
+//		chatRoomRepository.deleteByIdAndMatchRoomId();
+		//chatRoomRepository.deleteById(chatroomId);
 	}
 }

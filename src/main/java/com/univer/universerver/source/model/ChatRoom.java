@@ -24,7 +24,7 @@ public class ChatRoom extends DateAudit {
     @JoinColumn(name = "matchroom_id")
     private MatchRoom matchRoom;
     @OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "chatRoomUser")
-    private List<ChatRoomUser> chatRoomUsers;
+    private List<ChatRoomUser> chatRoomUser;
 //    @OneToMany(orphanRemoval=true,mappedBy = "chatRoomUser")
 //    private List<ChatRoomUser> chatRoomUsers=new ArrayList<>();
 }

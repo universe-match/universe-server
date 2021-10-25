@@ -25,7 +25,7 @@ public class UploadController {
 		Map<String,String> map=new HashMap<String, String>();
 		String imgUrl = s3Uploader.upload(multipartFile, "user");
 		map.put("imgUrl",imgUrl);
-       
+		System.out.println(imgUrl);
 		return ResponseEntity.ok(map);
     }
 	@PostMapping("/user/certi/image")

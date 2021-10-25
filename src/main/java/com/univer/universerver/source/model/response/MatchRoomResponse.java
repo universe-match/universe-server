@@ -35,6 +35,8 @@ public class MatchRoomResponse {
 
     private List<UserResponse> matchingList;
 
+    private long matchRoomLen;
+
     public MatchRoomResponse(MatchRoom matchRoom) {
         this.id = matchRoom.getId();
         this.title = matchRoom.getTitle();
@@ -47,13 +49,7 @@ public class MatchRoomResponse {
         this.toDate = matchRoom.getToDate();
         this.nickName = matchRoom.getUser().getNickname();
         this.matchingList = matchRoom.getMatchingList().stream().map(item->new UserResponse(item)).collect(Collectors.toList());
+        this.matchRoomLen = matchRoom.getMatchingList().size();
         //this.matchingList = new UserResponse(matchRoom.getMatchingList());
-//        for(int i=0;i<matchRoom.getMatchingList().size();i++){
-//            this.matchingList = matchRoom.getMatchingList().get(i).getUser();
-//        }
-//        matchRoom.getMatchingList().forEach(item->{
-//            this.matchingList = item.getUser();
-//        });
-//        this.matchingList = matchRoom.getMatchingList()
     }
 }

@@ -26,30 +26,30 @@ public class NotificationController {
     @Autowired
     AndroidPushNotificationsService androidPushNotificationsService;
 
-    @GetMapping(value = "/send")
-    public @ResponseBody ResponseEntity<String> send(HttpServletResponse response) throws JSONException, InterruptedException  {
-        String notifications = AndroidPushPeriodicNotifications.PeriodicNotificationJson();
-        HttpHeaders resHeader = new HttpHeaders();
-        resHeader.add("Content-Type", "application/json;charset=UTF-8");
-        HttpEntity<String> request = new HttpEntity<>(notifications,resHeader);
-
-        //response.getWriter().print(notifications);
-
-        CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
-        CompletableFuture.allOf(pushNotification).join();
-
-        try{
-            String firebaseResponse = pushNotification.get();
-            return new ResponseEntity<>(firebaseResponse, HttpStatus.OK);
-        }
-        catch (InterruptedException e){
-            logger.debug("got interrupted!");
-            throw new InterruptedException();
-        }
-        catch (ExecutionException e){
-            logger.debug("execution error!");
-        }
-
-        return new ResponseEntity<>("Push Notification ERROR!", HttpStatus.BAD_REQUEST);
-    }
+//    @GetMapping(value = "/send")
+//    public @ResponseBody ResponseEntity<String> send(HttpServletResponse response) throws JSONException, InterruptedException  {
+//        //String notifications = AndroidPushPeriodicNotifications.PeriodicNotificationJson();
+//        HttpHeaders resHeader = new HttpHeaders();
+//        resHeader.add("Content-Type", "application/json;charset=UTF-8");
+//        HttpEntity<String> request = new HttpEntity<>(notifications,resHeader);
+//
+//        //response.getWriter().print(notifications);
+//
+//        CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
+//        CompletableFuture.allOf(pushNotification).join();
+//
+//        try{
+//            String firebaseResponse = pushNotification.get();
+//            return new ResponseEntity<>(firebaseResponse, HttpStatus.OK);
+//        }
+//        catch (InterruptedException e){
+//            logger.debug("got interrupted!");
+//            throw new InterruptedException();
+//        }
+//        catch (ExecutionException e){
+//            logger.debug("execution error!");
+//        }
+//
+//        return new ResponseEntity<>("Push Notification ERROR!", HttpStatus.BAD_REQUEST);
+//    }
 }

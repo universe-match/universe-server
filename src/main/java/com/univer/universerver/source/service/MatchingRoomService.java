@@ -60,13 +60,13 @@ public class MatchingRoomService {
 		matchroom.setUser(user.get());
 		
 		MatchRoom rtnMatchRoom = matchRoomRepository.save(matchroom);
-		matchingService.insertInvitedPeople(rtnMatchRoom.getId(), user.get().getId());
+		matchingService.insertInvitedPeople(rtnMatchRoom.getId(), user.get().getId(),'Y');
 		ChatRoom chatRoom = chatRoomService.insertChatRoomPeople(rtnMatchRoom.getId());
 		chatRoomUserService.insertChatRoomUser(chatRoom,user.get());
-//		chatRoomUserService.insertChatRoomUser()
+
 		if(matchroomReq.getFriends().length>0) {
 			for(long friend:matchroomReq.getFriends()) {
-				matchingService.insertInvitedPeople(rtnMatchRoom.getId(), friend);
+				matchingService.insertInvitedPeople(rtnMatchRoom.getId(), friend,'N');
 			}	
 		}
 		

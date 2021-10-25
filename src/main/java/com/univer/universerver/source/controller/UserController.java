@@ -133,10 +133,10 @@ public class UserController extends HttpServlet {
     }
     @ApiOperation(value="내정보수정",notes="내정보수정")
     @PatchMapping("/myinfo/update")
-    public ResponseEntity<?> myInfoUpdate(Principal principal,@RequestBody  UserRequest userRequest) {
+    public ResponseEntity<?> myInfoUpdate(@RequestBody  UserRequest userRequest) {
 //        Optional<User> user = userService.findMyUserInfo(principal.getName());
-        System.out.println(userRequest);
-        return ResponseEntity.ok(userRequest);
+        userService.updateUser(userRequest);
+        return ResponseEntity.ok("수정되었습니다.");
     }
 
     @ApiOperation(value="회원탈퇴",notes="회원탈퇴")
@@ -156,7 +156,6 @@ public class UserController extends HttpServlet {
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@RequestBody SignUpForm signUpRequest) {
 
-
        userService.registerUser(signUpRequest);
             //이메일 인증
 //            if(!user.getEmail().isEmpty()) {
@@ -164,7 +163,26 @@ public class UserController extends HttpServlet {
 //            }
        return new ResponseEntity<>("성공적으로 가입되었습니다.", HttpStatus.OK);
     }
-
+    @ApiOperation(value="닉네임 체크",notes="닉네임 체크")
+    @GetMapping("/{nickName}")
+    public ResponseEntity<?> duplCheckNickname(@PathVariable(name = "nickName") String nickName){
+        Optional<User> user = userService.selectNickname(nickName);
+        if(user.isPresent()){
+            return new ResponseEntity<>("이미 존재하는 닉네임입니다.", HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>("사용가능한 닉네임입니다.", HttpStatus.BAD_REQUEST);
+        }
+    }
+    @ApiOperation(value="아이디 체크",notes="아이디 체크")
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> duplCheckUserId(@PathVariable(name = "userId") String userId){
+        Optional<User> user = userService.checkUserId(userId);
+        if(user.isPresent()){
+            return new ResponseEntity<>("이미 존재하는 아이디입니다.", HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>("사용가능한 아이디입니다.", HttpStatus.BAD_REQUEST);
+        }
+    }
 //    @ApiOperation(value="토큰재발행",notes="토큰재발행")
 //    @PostMapping("/refresh")
 //    public ResponseEntity<?> refresh(@RequestParam(name = "refresh_token") String refreshToken) throws IOException {

@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AndroidPushPeriodicNotifications {
-    public static String PeriodicNotificationJson() throws JSONException {
+    public static String PeriodicNotificationJson(String nickName,String token,String title,String content) throws JSONException {
         LocalDate localDate = LocalDate.now();
 
-        String sampleData[] = {"eO5PrXXYvkRQsEpt4dQzzf:APA91bEH_9K7U7PGVnwyN-dvrWujm8pheN1_lEfhShQu4jF4l4jVid_FxexrZX-DOJQ2pY8C9820VcDFhyoT4xyYBXRtp1Jpq7eJuhuUBfC59wm7mGnDhR4e2dqMXbK0Y1Li6f_KTwDy"};
+        String sampleData[] = {token};
 
         JSONObject body = new JSONObject();
 
@@ -30,8 +30,8 @@ public class AndroidPushPeriodicNotifications {
         body.put("registration_ids", array);
 
         JSONObject notification = new JSONObject();
-        notification.put("title","hello world!");
-        notification.put("body","Today is Good "+localDate.getDayOfWeek().name()+"!");
+        notification.put("title",title);
+        notification.put("body",content);
 
         body.put("notification", notification);
 
