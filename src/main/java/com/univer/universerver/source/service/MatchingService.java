@@ -2,6 +2,8 @@ package com.univer.universerver.source.service;
 
 import java.security.Principal;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.univer.universerver.source.model.ChatRoom;
 import com.univer.universerver.source.repository.ChatRoomRepository;
@@ -132,10 +134,44 @@ public class MatchingService {
 	public void deleteMatching(long chatroomId,Principal principal) {
 		Optional<ChatRoom> chatRoom = chatRoomRepository.findById(chatroomId);
 		long matchRoomId = chatRoom.get().getMatchRoom().getId();
+
 		Optional<User> user= userRepository.findByUserid(principal.getName());
 
-		matchingRepository.deleteByMatchRoomIdAndUserId(matchRoomId,user.get().getId());
-		chatRoomUserService.deleteUser(user.get(),chatRoom.get().getId());
+		chatRoom.get().getMatchRoom().getMatchingList().stream().forEach(item-> {
+			if(item.getUser().getId()==user.get().getId()){
+
+				if(item.getMasterYn()=='Y'){
+					Long minUserId = matchingRepository.selectMinUserId(matchRoomId);
+
+
+					matchingRepository.deleteByMatchRoomIdAndUserId(matchRoomId,user.get().getId());
+					chatRoomUserService.deleteUser(user.get(),chatRoom.get().getId());
+					if(minUserId!=null){
+						Optional<Matching> minUser = matchingRepository.findById(minUserId);
+						Optional<MatchRoom> matchRoom = matchRoomRepository.findByUserId(user.get().getId());
+						minUser.get().setMasterYn('Y');
+						matchingRepository.save(minUser.get());
+//						matchRoom.ifPresent(mRoom->{
+//							User newMaster =new User();
+//							newMaster.setId(minUser.get().getUser().getId());
+//							mRoom.setUser(newMaster);
+//							matchRoomRepository.save(mRoom);
+//						});
+					}else{
+						chatRoomRepository.deleteById(chatRoom.get().getId());
+						matchRoomRepository.deleteById(matchRoomId);
+
+					}
+				}else{
+					matchingRepository.deleteByMatchRoomIdAndUserId(matchRoomId,user.get().getId());
+					chatRoomUserService.deleteUser(user.get(),chatRoom.get().getId());
+				}
+			}
+
+
+		});
+
+
 //		chatRoomRepository.deleteByIdAndMatchRoomId();
 		//chatRoomRepository.deleteById(chatroomId);
 	}

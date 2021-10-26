@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.univer.universerver.source.model.MatchRoom;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MatchRoomRepository extends JpaRepository<MatchRoom,Long>{
@@ -19,4 +20,6 @@ public interface MatchRoomRepository extends JpaRepository<MatchRoom,Long>{
 
 	@Query(value="select * from matchroom m order by rand() limit 5",nativeQuery = true)
 	List<MatchRoom> findAllRandomList();
+
+    Optional<MatchRoom> findByUserId(Long id);
 }
