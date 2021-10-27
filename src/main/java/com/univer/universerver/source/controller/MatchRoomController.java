@@ -2,6 +2,7 @@ package com.univer.universerver.source.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,13 +38,23 @@ public class MatchRoomController {
 	@ApiOperation(value="그룹리스트 조회",notes="그룹리스트 조회")
 	@GetMapping
 	public ResponseEntity<?> getMatchRoomList(Principal principal) {
-		List<MatchRoom> matchRoom = matchRoomService.getMatchRoomList(principal);
+		List<MatchRoom> matchRoom = matchRoomService.getMatchRoomList(principal,"");
+		List<MatchRoomResponse> matchRoomRes = matchRoom
+				.stream()
+				.map(item->new MatchRoomResponse(item))
+				.collect(Collectors.toList());
+//		Page<MatchRoomResponse> rtnMatchRoom = new PageImpl<>(matchRoomRes);
+		return ResponseEntity.ok(matchRoomRes);
+	}
+	@ApiOperation(value="그룹리스트 검색조회",notes="그룹리스트 검색조회")
+	@GetMapping("/{search}")
+	public ResponseEntity<?> getMatchRoomListSearch(Principal principal,@PathVariable(required = false,name = "search") String search) {
+		List<MatchRoom> matchRoom = matchRoomService.getMatchRoomList(principal,search);
 		List<MatchRoomResponse> matchRoomRes = matchRoom
 												.stream()
 												.map(item->new MatchRoomResponse(item))
 												.collect(Collectors.toList());
 //		Page<MatchRoomResponse> rtnMatchRoom = new PageImpl<>(matchRoomRes);
 		return ResponseEntity.ok(matchRoomRes);
-
 	}
 }

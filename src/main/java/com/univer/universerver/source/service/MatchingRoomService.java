@@ -73,10 +73,15 @@ public class MatchingRoomService {
 		return rtnMatchRoom;
 	}
 
-    public List<MatchRoom> getMatchRoomList(Principal principal) {
+    public List<MatchRoom> getMatchRoomList(Principal principal,String search) {
 
 //		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
 //		pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
-		return matchRoomRepository.findAllRandomList();
+		if(search.equals("")){
+			return matchRoomRepository.findAllRandomList();
+		}else{
+			return matchRoomRepository.findAllRandomListByTitleLike("%"+search);
+		}
+
     }
 }

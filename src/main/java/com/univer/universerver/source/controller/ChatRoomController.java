@@ -59,9 +59,11 @@ public class ChatRoomController {
     }
     @ApiOperation(value="채팅방내 사람 조회",notes="채팅방내 사람 조회")
     @GetMapping("/info/{chatroomId}")
-    public ResponseEntity<?> getchatRoomPeopleInfo(@PathVariable(name = "chatroomId") long id) {
+    public ResponseEntity<?> getchatRoomPeopleInfo(Principal principal,@PathVariable(name = "chatroomId") long id) {
+        Optional<User> user = userService.findMyUserInfo(principal.getName());
         List<UserResponse> chatRoomInfo = chatRoomService.selectchatRoomPeopleInfo(id);
-        return ResponseEntity.ok(chatRoomInfo);
+
+        return ResponseEntity.ok(chatRoomInfo.stream().filter(chatUser->chatUser.getId()!=user.get().getId()));
     }
     @ApiOperation(value="채팅방내 사람 강퇴",notes="채팅방내 사람 강퇴")
     @PatchMapping("/ban")
