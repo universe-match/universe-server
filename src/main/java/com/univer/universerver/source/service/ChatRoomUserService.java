@@ -30,4 +30,8 @@ public class ChatRoomUserService {
         ChatRoomUser chatRoomUser = chatRoomUserRepository.findByUserIdAndChatRoomUserId(userId,chatroomId);
         chatRoomUserRepository.deleteById(chatRoomUser.getId());
     }
+
+    public void banUsers(String userId, long chatroomId) {
+        chatRoomUserRepository.deleteByUserIdAndChatRoomUserId(Long.parseLong(userId),chatroomId);
+    }
 }

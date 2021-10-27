@@ -1,5 +1,6 @@
 package com.univer.universerver.source.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,7 +18,7 @@ public interface MatchingRepository extends JpaRepository<Matching,Long>{
 
 	boolean existsByUser(User user);
 
-	Matching findByMatchRoom(long matchRoomId);
+	List<Matching> findByMatchRoom(Matching matchRoomId);
 
 	long countByMatchRoom(MatchRoom matchRoom);
 
@@ -31,4 +32,6 @@ public interface MatchingRepository extends JpaRepository<Matching,Long>{
 	Matching findByUserId(long userId);
 
 	Matching findByMatchRoomIdAndUserId(long matchRoomId, long minUserId);
+
+	List<Matching> findByMatchRoomId(Long matchroomid);
 }

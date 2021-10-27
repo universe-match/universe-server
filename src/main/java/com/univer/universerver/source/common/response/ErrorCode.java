@@ -18,8 +18,8 @@ public enum ErrorCode {
 	NOT_LOGIN(400,"USER-ERR-400","먼저 로그인을 해주세요"),
 	ACCESS_DENIED(400,"USER-ERR-400","접근이 불가능합니다"),
 	ERR_ID_PASSWORD(400,"USER-ERR-400","아이디 또는 비밀번호가 틀렸습니다."),
-	ERR_ID_CHATROOM(400,"CHATROOM-ERR-400","채팅방을 찾을 수 없습니다.");
-
+	ERR_ID_CHATROOM(400,"CHATROOM-ERR-400","채팅방을 찾을 수 없습니다."),
+	ERR_NO_MASTER(400,"CHATROOM-ERR-400","방장이 아닙니다.");
     private int status;
     private String errorCode;
     private String message;

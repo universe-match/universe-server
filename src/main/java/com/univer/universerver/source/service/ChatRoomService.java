@@ -71,4 +71,8 @@ public class ChatRoomService {
                                                         .collect(Collectors.toList());
         return chatRoomList;
     }
+
+    public ChatRoom findChatRoom(long chatroomId) {
+        return chatRoomRepository.findById(chatroomId).get();
+    }
 }

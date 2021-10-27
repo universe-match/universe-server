@@ -1,20 +1,22 @@
 package com.univer.universerver.source.controller;
 
-import com.univer.universerver.source.model.ChatRoom;
-import com.univer.universerver.source.model.MatchRoom;
-import com.univer.universerver.source.model.Message;
+import com.univer.universerver.source.common.response.ErrorCode;
+import com.univer.universerver.source.common.response.exception.CommonException;
+import com.univer.universerver.source.common.response.exception.UserException;
+import com.univer.universerver.source.model.*;
+import com.univer.universerver.source.model.request.chatroom.BanRequest;
 import com.univer.universerver.source.model.response.ChatRoomResponse;
 import com.univer.universerver.source.model.response.MatchRoomResponse;
 import com.univer.universerver.source.model.response.MessageResponse;
 import com.univer.universerver.source.model.response.UserResponse;
-import com.univer.universerver.source.service.ChatRoomService;
-import com.univer.universerver.source.service.MessageService;
+import com.univer.universerver.source.service.*;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Array;
@@ -22,6 +24,7 @@ import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -32,6 +35,12 @@ public class ChatRoomController {
     ChatRoomService chatRoomService;
     @Autowired
     private MessageService messageService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private MatchingService matchingService;
+    @Autowired
+    private ChatRoomUserService chatRoomUserService;
 
     @ApiOperation(value="채팅리스트 조회",notes="채팅리스트 조회")
     @GetMapping
@@ -56,10 +65,24 @@ public class ChatRoomController {
     }
     @ApiOperation(value="채팅방내 사람 강퇴",notes="채팅방내 사람 강퇴")
     @PatchMapping("/ban")
-    public ResponseEntity<?> banUser(@RequestBody Map<String, String[]> param) {
-        String[] ids = param.get("ids");
-        Arrays.stream(ids).forEach(item-> {
-            System.out.println(item);
+    @Transactional
+    public ResponseEntity<?> banUser(Principal principal,@RequestBody BanRequest param) {
+        long chatroomId = param.getChatroomId();
+
+        Optional<User> user = userService.findMyUserInfo(principal.getName());
+        ChatRoom chatRoom = chatRoomService.findChatRoom(chatroomId);
+        List<Matching> matchings = matchingService.findMatchRoom(chatRoom.getMatchRoom().getId());
+        matchings.stream().forEach(item->{
+            if(item.getUser().getId()==user.get().getId()){
+                if(item.getMasterYn()=='N'){
+                    throw new UserException(ErrorCode.ERR_NO_MASTER);
+                }
+            }
+        });
+        String[] ids = param.getIds();
+        Arrays.stream(ids).forEach(userId-> {
+            chatRoomUserService.banUsers(userId,chatroomId);
+            matchingService.deleteUser(userId,chatRoom.getMatchRoom().getId());
         });
         return ResponseEntity.ok("");
     }

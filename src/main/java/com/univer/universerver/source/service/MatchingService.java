@@ -1,6 +1,7 @@
 package com.univer.universerver.source.service;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -21,6 +22,8 @@ import com.univer.universerver.source.repository.MatchRoomRepository;
 import com.univer.universerver.source.repository.MatchingRepository;
 import com.univer.universerver.source.repository.UserRepository;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.crypto.Mac;
 
 @Service
 @Transactional
@@ -174,5 +177,14 @@ public class MatchingService {
 
 //		chatRoomRepository.deleteByIdAndMatchRoomId();
 		//chatRoomRepository.deleteById(chatroomId);
+	}
+
+
+	public List<Matching> findMatchRoom(Long matchroomid) {
+		return matchingRepository.findByMatchRoomId(matchroomid);
+	}
+
+	public void deleteUser(String userId, Long matchRoomId) {
+		matchingRepository.deleteByMatchRoomIdAndUserId(matchRoomId,Long.parseLong(userId));
 	}
 }
