@@ -7,6 +7,7 @@ import com.univer.universerver.source.model.Message;
 import com.univer.universerver.source.model.MessageType;
 import com.univer.universerver.source.repository.ChatRoomRepository;
 import com.univer.universerver.source.service.ChatRoomService;
+import com.univer.universerver.source.service.ChatRoomUserService;
 import com.univer.universerver.source.service.MessageService;
 import com.univer.universerver.source.utils.JsonUtil;
 import com.univer.universerver.source.utils.LocalDateTimeUtil;
@@ -57,6 +58,8 @@ public class ChatHandler extends TextWebSocketHandler {
     @Autowired
     private ChatRoomRepository chatRoomRepository;
     @Autowired
+    private ChatRoomUserService chatRoomUserService;
+    @Autowired
     private MessageService messageService;
 
     public static final Map<Long, Map<String, WebSocketSession>> chatroomMap = new HashMap<>();
@@ -100,12 +103,17 @@ public class ChatHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String text = message.getPayload();
 
+
+
         JSONObject object = JsonUtil.parse(text);
         log.info(object.toJSONString());
 
         if (object.get(CHATROOM_ID) != null) {
 
             Long chatroomId = (Long) object.get(CHATROOM_ID);
+
+            ChatRoom chatRoom = chatRoomService.findChatRoom(chatroomId);
+            chatRoom.getMatchRoom().getId();
 
             // 해당 방의 세션에만 메세지 발송
             Map<String, WebSocketSession> sessionMap = chatroomMap.get(chatroomId);

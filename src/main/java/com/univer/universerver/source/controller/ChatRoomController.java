@@ -5,6 +5,7 @@ import com.univer.universerver.source.common.response.exception.CommonException;
 import com.univer.universerver.source.common.response.exception.UserException;
 import com.univer.universerver.source.model.*;
 import com.univer.universerver.source.model.request.chatroom.BanRequest;
+import com.univer.universerver.source.model.request.chatroom.HelloMessage;
 import com.univer.universerver.source.model.response.ChatRoomResponse;
 import com.univer.universerver.source.model.response.MatchRoomResponse;
 import com.univer.universerver.source.model.response.MessageResponse;
@@ -16,8 +17,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
 
 import java.lang.reflect.Array;
 import java.security.Principal;
@@ -88,4 +92,5 @@ public class ChatRoomController {
         });
         return ResponseEntity.ok("");
     }
+
 }
