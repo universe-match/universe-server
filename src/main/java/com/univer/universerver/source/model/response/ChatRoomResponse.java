@@ -3,6 +3,7 @@ package com.univer.universerver.source.model.response;
 import com.univer.universerver.source.model.ChatRoom;
 import com.univer.universerver.source.model.ChatRoomUser;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 

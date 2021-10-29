@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
@@ -45,6 +46,8 @@ public class ChatRoomController {
     private MatchingService matchingService;
     @Autowired
     private ChatRoomUserService chatRoomUserService;
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @ApiOperation(value="채팅리스트 조회",notes="채팅리스트 조회")
     @GetMapping
@@ -89,7 +92,10 @@ public class ChatRoomController {
         Arrays.stream(ids).forEach(userId-> {
             chatRoomUserService.banUsers(userId,chatroomId);
             matchingService.deleteUser(userId,chatRoom.getMatchRoom().getId());
+            String msg = "ban";
+            messagingTemplate.convertAndSend("/topic/ban/"+userId,msg);
         });
+
         return ResponseEntity.ok("");
     }
 

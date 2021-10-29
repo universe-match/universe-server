@@ -23,6 +23,8 @@ import org.springframework.web.filter.CorsFilter;
 import com.univer.universerver.source.security.jwt.JwtAuthEntryPoint;
 import com.univer.universerver.source.security.jwt.JwtAuthTokenFilter;
 import com.univer.universerver.source.security.service.UserDetailsServiceImpl;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @Configuration
@@ -48,6 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
+
 //    //cors설정부분
 //    @Bean
 //    public CorsConfigurationSource corsConfigurationSource() {

@@ -7,8 +7,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.univer.universerver.source.model.ChatRoom;
+import com.univer.universerver.source.model.response.MessageResponse;
 import com.univer.universerver.source.repository.ChatRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.univer.universerver.source.common.response.ErrorCode;
@@ -39,6 +41,8 @@ public class MatchingService {
 	private ChatRoomRepository chatRoomRepository;
 	@Autowired
 	private ChatRoomUserService chatRoomUserService;
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
 	public Matching insertPeople(MatchingReq matchingReq, Principal principal) {
 		
 		if(principal==null) {
@@ -72,6 +76,12 @@ public class MatchingService {
 				matching.setAgree('N');
 				matching.setMasterYn('N');
 				ChatRoom chatRoom = chatRoomRepository.findByMatchRoom(matchRoom);
+
+				MessageResponse messageResponse = new MessageResponse();
+				messageResponse.setMessage(user.get().getNickname()+"님이 입장하셨습니다");
+				messageResponse.setChatroomId(20L);
+
+				messagingTemplate.convertAndSend("/topic/chatroom/enter/"+chatRoom.getId(), messageResponse);
 //				ChatRoom newChatRoom = new ChatRoom();
 //				newChatRoom.setMatchRoom(chatRoom.getMatchRoom());
 //				newChatRoom.setChatRoomUsers(newChatRoom.getChatRoomUsers());
@@ -143,6 +153,11 @@ public class MatchingService {
 		chatRoom.get().getMatchRoom().getMatchingList().stream().forEach(item-> {
 			if(item.getUser().getId()==user.get().getId()){
 
+				MessageResponse messageResponse = new MessageResponse();
+				messageResponse.setMessage(user.get().getNickname()+"님이 입장하셨습니다");
+				messageResponse.setChatroomId(20L);
+				messagingTemplate.convertAndSend("/topic/chatroom/exit/"+chatRoom.get().getId(), messageResponse);
+
 				if(item.getMasterYn()=='Y'){
 					Long minUserId = matchingRepository.selectMinUserId(matchRoomId);
 
@@ -169,6 +184,7 @@ public class MatchingService {
 					matchingRepository.deleteByMatchRoomIdAndUserId(matchRoomId,user.get().getId());
 					chatRoomUserService.deleteUser(user.get(),chatRoom.get().getId());
 				}
+
 			}
 
 

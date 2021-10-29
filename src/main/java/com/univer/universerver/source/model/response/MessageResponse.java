@@ -14,6 +14,9 @@ public class MessageResponse {
     private String sentAt;
     private String profileUrl;
 
+    public MessageResponse(){
+
+    }
     public MessageResponse(Message item) {
         this.chatroomId = item.getChatroomId();
         this.userKey = item.getUserKey();
