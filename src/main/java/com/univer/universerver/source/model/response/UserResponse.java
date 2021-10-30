@@ -41,6 +41,7 @@ public class UserResponse {
         this.userImages = user.getUserImages().stream().map(item->new UserImageResponse(item)).collect(Collectors.toList());
 //        this.profileImg = user.getProfileImg();
     }
+
     public UserResponse(Matching matchingUser){
         this.nickname = matchingUser.getUser().getNickname();
         this.age = matchingUser.getUser().getAge();

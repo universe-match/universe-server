@@ -9,8 +9,12 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServlet;
 import javax.validation.Valid;
 
+import com.univer.universerver.source.model.University;
 import com.univer.universerver.source.model.User;
 import com.univer.universerver.source.model.request.UserRequest;
+import com.univer.universerver.source.model.request.admin.AdminUserRequest;
+import com.univer.universerver.source.model.response.AdminUserResponse;
+import com.univer.universerver.source.model.response.MatchRoomResponse;
 import com.univer.universerver.source.model.response.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -183,6 +187,34 @@ public class UserController extends HttpServlet {
             return new ResponseEntity<>("사용가능한 아이디입니다.", HttpStatus.BAD_REQUEST);
         }
     }
+    @ApiOperation(value="유저리스트 조회",notes="유저리스트 조회")
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getUserList(Principal principal) {
+        List<User> users = userService.findAllUsr();
+        List<AdminUserResponse> userRes = users
+                                        .stream()
+                                        .map(user->new AdminUserResponse(user))
+                                        .collect(Collectors.toList());
+        return ResponseEntity.ok(userRes);
+    }
+    @ApiOperation(value="유저 활성화",notes="유저 활성화")
+    @PatchMapping("/valid")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> validUser(Principal principal,@RequestBody AdminUserRequest adminUserRequest) {
+        userService.validUser(adminUserRequest);
+        return ResponseEntity.ok("활성화 되었습니다.");
+    }
+    @ApiOperation(value="대학리스트 조회",notes="대학리스트 조회")
+    @GetMapping("/university")
+    public ResponseEntity<?> getUniversity(@RequestParam String name) {
+        List<University> universities = userService.findUniversity(name);
+        return ResponseEntity.ok(universities);
+    }
+//    List<MatchRoomResponse> matchRoomRes = matchRoom
+//            .stream()
+//            .map(item->new MatchRoomResponse(item))
+//            .collect(Collectors.toList());
 //    @ApiOperation(value="토큰재발행",notes="토큰재발행")
 //    @PostMapping("/refresh")
 //    public ResponseEntity<?> refresh(@RequestParam(name = "refresh_token") String refreshToken) throws IOException {

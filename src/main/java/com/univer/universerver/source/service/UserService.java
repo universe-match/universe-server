@@ -1,13 +1,13 @@
 package com.univer.universerver.source.service;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
+import com.univer.universerver.source.model.University;
 import com.univer.universerver.source.model.UserImage;
 import com.univer.universerver.source.model.request.UserRequest;
+import com.univer.universerver.source.model.request.admin.AdminUserRequest;
+import com.univer.universerver.source.repository.UniversityRepository;
 import com.univer.universerver.source.repository.UserImageRepository;
 import com.univer.universerver.source.security.jwt.JwtAuthTokenFilter;
 import org.slf4j.Logger;
@@ -38,7 +38,8 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private UniversityRepository universityRepository;
     @Autowired
     private UserImageRepository userImageRepository;
     @Autowired
@@ -159,5 +160,25 @@ public class UserService {
             user.get().setIntroduce(userRequest.getIntroduce());
             userRepository.save(user.get());
         });
+    }
+
+    public List<User> findAllUsr() {
+        return userRepository.findAll();
+    }
+
+    public void validUser(AdminUserRequest adminUserRequest) {
+        Optional<User> user=userRepository.findById(adminUserRequest.getId());
+        user.ifPresent(userOne -> {
+            userOne.setVerified(true);
+            userRepository.save(userOne);
+        });
+    }
+
+    public List<University> findAllUniversity() {
+        return universityRepository.findAll();
+    }
+
+    public List<University> findUniversity(String name) {
+        return universityRepository.findByNameLike(name+"%");
     }
 }

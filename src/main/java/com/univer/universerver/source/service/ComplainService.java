@@ -9,9 +9,10 @@ import org.springframework.stereotype.Service;
 public class ComplainService {
     @Autowired
     private ComplainRepository complainRepository;
-    public void saveContent(String content) {
+    public void saveContent(String content,long userKey) {
         Complain complain =new Complain();
         complain.setContent(content);
+        complain.setUserKey(userKey);
         complainRepository.save(complain);
     }
 }

@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.univer.universerver.source.model.ChatRoom;
+import com.univer.universerver.source.model.*;
 import com.univer.universerver.source.model.response.MessageResponse;
 import com.univer.universerver.source.repository.ChatRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +15,6 @@ import org.springframework.stereotype.Service;
 
 import com.univer.universerver.source.common.response.ErrorCode;
 import com.univer.universerver.source.common.response.exception.UserException;
-import com.univer.universerver.source.model.MatchRoom;
-import com.univer.universerver.source.model.Matching;
-import com.univer.universerver.source.model.User;
 import com.univer.universerver.source.model.dto.MatchingDTO;
 import com.univer.universerver.source.model.request.matching.MatchingReq;
 import com.univer.universerver.source.repository.MatchRoomRepository;
@@ -43,6 +40,8 @@ public class MatchingService {
 	private ChatRoomUserService chatRoomUserService;
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
+	@Autowired
+	private MessageService messageService;
 	public Matching insertPeople(MatchingReq matchingReq, Principal principal) {
 		
 		if(principal==null) {
@@ -52,9 +51,9 @@ public class MatchingService {
 			
 			Optional<MatchRoom> matchRoomD = matchRoomRepository.findById(matchingReq.getMid());
 
-			if(matchRoomD.get().getUser().getId()==user.get().getId()) {
-				throw new UserException(ErrorCode.MATCHING_ROOMMASTER_DUPLICATION);
-			}
+//			if(matchRoomD.get().getUser().getId()==user.get().getId()) {
+//				throw new UserException(ErrorCode.MATCHING_ROOMMASTER_DUPLICATION);
+//			}
 			
 			long matchingCnt =matchingRepository.countByMatchRoom(matchRoomD.get());
 			
@@ -79,7 +78,13 @@ public class MatchingService {
 
 				MessageResponse messageResponse = new MessageResponse();
 				messageResponse.setMessage(user.get().getNickname()+"님이 입장하셨습니다");
-				messageResponse.setChatroomId(20L);
+				messageResponse.setChatroomId(chatRoom.getId());
+
+				Message message =new Message();
+				message.setMessage(user.get().getNickname()+"님이 입장하셨습니다");
+				message.setChatroomId(chatRoom.getId());
+
+				messageService.saveMessage(message);
 
 				messagingTemplate.convertAndSend("/topic/chatroom/enter/"+chatRoom.getId(), messageResponse);
 //				ChatRoom newChatRoom = new ChatRoom();
@@ -154,9 +159,14 @@ public class MatchingService {
 			if(item.getUser().getId()==user.get().getId()){
 
 				MessageResponse messageResponse = new MessageResponse();
-				messageResponse.setMessage(user.get().getNickname()+"님이 입장하셨습니다");
-				messageResponse.setChatroomId(20L);
+				messageResponse.setMessage(user.get().getNickname()+"님이 퇴장하셨습니다");
+				messageResponse.setChatroomId(chatRoom.get().getId());
 				messagingTemplate.convertAndSend("/topic/chatroom/exit/"+chatRoom.get().getId(), messageResponse);
+
+				Message message =new Message();
+				message.setMessage(user.get().getNickname()+"님이 퇴장하셨습니다");
+				message.setChatroomId(chatRoom.get().getId());
+				messageService.saveMessage(message);
 
 				if(item.getMasterYn()=='Y'){
 					Long minUserId = matchingRepository.selectMinUserId(matchRoomId);

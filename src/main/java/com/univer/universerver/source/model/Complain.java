@@ -22,4 +22,7 @@ public class Complain extends DateAudit {
     @Lob
     @Column(name="content")
     private String content;
+
+    @Column(name="userkey")
+    private long userKey;
 }
