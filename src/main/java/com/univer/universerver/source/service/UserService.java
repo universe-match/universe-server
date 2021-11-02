@@ -3,12 +3,10 @@ package com.univer.universerver.source.service;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import com.univer.universerver.source.model.University;
-import com.univer.universerver.source.model.UserImage;
+import com.univer.universerver.source.model.*;
 import com.univer.universerver.source.model.request.UserRequest;
 import com.univer.universerver.source.model.request.admin.AdminUserRequest;
-import com.univer.universerver.source.repository.UniversityRepository;
-import com.univer.universerver.source.repository.UserImageRepository;
+import com.univer.universerver.source.repository.*;
 import com.univer.universerver.source.security.jwt.JwtAuthTokenFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.univer.universerver.source.common.response.ErrorCode;
 import com.univer.universerver.source.common.response.exception.UserException;
-import com.univer.universerver.source.model.Role;
-import com.univer.universerver.source.model.User;
 import com.univer.universerver.source.model.request.SignUpForm;
-import com.univer.universerver.source.repository.RoleRepository;
-import com.univer.universerver.source.repository.UserRepository;
 import com.univer.universerver.source.utils.RoleName;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +38,9 @@ public class UserService {
     private UserImageRepository userImageRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private CommonRepository commonRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthTokenFilter.class);
 
 
@@ -180,5 +177,9 @@ public class UserService {
 
     public List<University> findUniversity(String name) {
         return universityRepository.findByNameLike(name+"%");
+    }
+
+    public List<Common> findInterested() {
+        return commonRepository.findByComCd("CD01");
     }
 }

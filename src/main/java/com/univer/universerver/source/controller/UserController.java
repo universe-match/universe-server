@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServlet;
 import javax.validation.Valid;
 
+import com.univer.universerver.source.model.Common;
 import com.univer.universerver.source.model.University;
 import com.univer.universerver.source.model.User;
 import com.univer.universerver.source.model.request.UserRequest;
@@ -16,6 +17,8 @@ import com.univer.universerver.source.model.request.admin.AdminUserRequest;
 import com.univer.universerver.source.model.response.AdminUserResponse;
 import com.univer.universerver.source.model.response.MatchRoomResponse;
 import com.univer.universerver.source.model.response.UserResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +60,8 @@ public class UserController extends HttpServlet {
 
     @Autowired
     RoleRepository roleRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping(value = "/test")
     @PreAuthorize("hasRole('ADMIN')")
@@ -192,6 +197,9 @@ public class UserController extends HttpServlet {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getUserList(Principal principal) {
         List<User> users = userService.findAllUsr();
+
+        logger.debug("users",users);
+
         List<AdminUserResponse> userRes = users
                                         .stream()
                                         .map(user->new AdminUserResponse(user))
@@ -210,6 +218,12 @@ public class UserController extends HttpServlet {
     public ResponseEntity<?> getUniversity(@RequestParam String name) {
         List<University> universities = userService.findUniversity(name);
         return ResponseEntity.ok(universities);
+    }
+    @ApiOperation(value="관심사 조회",notes="관심사 조회")
+    @GetMapping("/interested")
+    public ResponseEntity<?> getInterested() {
+        List<Common> interested = userService.findInterested();
+        return ResponseEntity.ok(interested);
     }
 //    List<MatchRoomResponse> matchRoomRes = matchRoom
 //            .stream()

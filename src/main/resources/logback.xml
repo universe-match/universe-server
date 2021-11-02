@@ -4,7 +4,7 @@
       <pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-3level %logger{5} \(%F:%L\) - %msg %n</pattern>
     </encoder>
   </appender>
-  <property name="LOG_DIR" value="C:\\Users\\LG\\Desktop" />
+  <property name="LOG_DIR" value="LOG\\logs" />
 
   <appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -20,7 +20,7 @@
 
   <logger name="jdbc" level="OFF"/>
 
-  <logger name="jdbc.sqlonly" level="OFF"/>
+  <logger name="jdbc.sqlonly" level="INFO"/>
   <logger name="jdbc.sqltiming" level="DEBUG"/>
   <logger name="jdbc.audit" level="OFF"/>
   <logger name="jdbc.resultset" level="OFF"/>
@@ -28,10 +28,10 @@
     <appender-ref ref="STDOUT" />
   </logger>
   <logger name="jdbc.connection" level="OFF"/>
-  <logger name="org.hibernate.SQL" level="INFO" additivity="false">
+  <logger name="org.hibernate.SQL" level="INFO" additivity="true">
     <appender-ref ref="STDOUT" />
   </logger>
-  <logger name="org.hibernate.type" level="INFO" additivity="false">
+  <logger name="org.hibernate.type" level="INFO" additivity="true">
     <appender-ref ref="STDOUT" />
   </logger>
 
