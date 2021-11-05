@@ -40,6 +40,8 @@ public class UserService {
     private UserService userService;
     @Autowired
     private CommonRepository commonRepository;
+    @Autowired
+    private userInterestingRepository userInterestingRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthTokenFilter.class);
 
@@ -82,7 +84,16 @@ public class UserService {
             userImage.setProfileImg(signUpForm.getUserImages()[i]);
             userImage.setUser(rtnUser);
             userImageRepository.save(userImage);
+
+
         }
+        for(int i=0;i<signUpForm.getInterest().length;i++){
+            UserInteresting userInteresting = new UserInteresting();
+            userInteresting.setUser(rtnUser);
+            userInteresting.setContent(signUpForm.getInterest()[i]);
+            userInterestingRepository.save(userInteresting);
+        }
+
         user.setRoles(roles);
 
     }

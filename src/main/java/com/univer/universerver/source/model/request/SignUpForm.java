@@ -49,6 +49,8 @@ public class SignUpForm {
     @Size(min = 6, max = 40)
     private String password;
 
+    private String[] interest;
+
   //  private String profileimagePaths;
 
 }

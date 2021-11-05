@@ -3,6 +3,7 @@ package com.univer.universerver.source.model.response;
 import com.univer.universerver.source.model.Matching;
 import com.univer.universerver.source.model.User;
 import com.univer.universerver.source.model.UserImage;
+import com.univer.universerver.source.model.UserInteresting;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -30,6 +31,8 @@ public class UserResponse {
 
     private List<UserImageResponse> userImages = new ArrayList<UserImageResponse>();
 
+    private List<UserInteresting> userInterestings = new ArrayList<>();
+
     public UserResponse(User user){
         this.id = user.getId();
         this.nickname = user.getNickname();
@@ -39,6 +42,7 @@ public class UserResponse {
         this.introduce = user.getIntroduce();
         this.major = user.getMajor();
         this.userImages = user.getUserImages().stream().map(item->new UserImageResponse(item)).collect(Collectors.toList());
+        this.userInterestings = user.getUserInterestings();
 //        this.profileImg = user.getProfileImg();
     }
 

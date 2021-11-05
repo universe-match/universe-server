@@ -132,6 +132,8 @@ public class User extends DateAudit {
 
     @OneToMany(orphanRemoval=true,mappedBy = "user")
     private List<UserImage> userImages=new ArrayList<UserImage>();
+    @OneToMany(orphanRemoval=true,mappedBy = "user")
+    private List<UserInteresting> userInterestings=new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "chatRoomUser_id")
     private ChatRoomUser chatRoomUser;
