@@ -1,9 +1,8 @@
 package com.univer.universerver.source.service;
 
 import com.univer.universerver.source.model.Message;
-import com.univer.universerver.source.model.response.ChatRoomResponse;
 import com.univer.universerver.source.model.response.MessageResponse;
-import com.univer.universerver.source.repository.MessageRepository;
+import com.univer.universerver.source.repository.mongo.MessageRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
 package com.univer.universerver.source.service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -135,8 +136,13 @@ public class UserService {
 
 
     public void createFcmToken(String userName, String fcmToken) {
+        SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
+        Calendar time = Calendar.getInstance();
+        String format_time1 = format1.format(time.getTime());
+
         Optional<User> user = userService.findMyUserInfo(userName);
         user.get().setFcmToken(fcmToken);
+        user.get().setLastaccesstime(LocalDateTime.now());
         if(user.get().getFcmToken().equals(fcmToken)){
             return;
         }

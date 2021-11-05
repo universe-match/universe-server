@@ -173,23 +173,23 @@ public class UserController extends HttpServlet {
        return new ResponseEntity<>("성공적으로 가입되었습니다.", HttpStatus.OK);
     }
     @ApiOperation(value="닉네임 체크",notes="닉네임 체크")
-    @GetMapping("/{nickName}")
-    public ResponseEntity<?> duplCheckNickname(@PathVariable(name = "nickName") String nickName){
+    @GetMapping("/nicknamecheck")
+    public ResponseEntity<?> duplCheckNickname(@RequestParam(name = "nickName") String nickName){
         Optional<User> user = userService.selectNickname(nickName);
         if(user.isPresent()){
-            return new ResponseEntity<>("이미 존재하는 닉네임입니다.", HttpStatus.OK);
+            return new ResponseEntity<>("이미 존재하는 닉네임입니다.", HttpStatus.BAD_REQUEST);
         }else{
-            return new ResponseEntity<>("사용가능한 닉네임입니다.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("사용가능한 닉네임입니다.", HttpStatus.OK);
         }
     }
     @ApiOperation(value="아이디 체크",notes="아이디 체크")
-    @GetMapping("/{userId}")
-    public ResponseEntity<?> duplCheckUserId(@PathVariable(name = "userId") String userId){
+    @GetMapping("/idcheck")
+    public ResponseEntity<?> duplCheckUserId(@RequestParam(name="userId")  String userId){
         Optional<User> user = userService.checkUserId(userId);
         if(user.isPresent()){
-            return new ResponseEntity<>("이미 존재하는 아이디입니다.", HttpStatus.OK);
+            return new ResponseEntity<>("이미 존재하는 아이디입니다.", HttpStatus.BAD_REQUEST);
         }else{
-            return new ResponseEntity<>("사용가능한 아이디입니다.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("사용가능한 아이디입니다.", HttpStatus.OK);
         }
     }
     @ApiOperation(value="유저리스트 조회",notes="유저리스트 조회")
