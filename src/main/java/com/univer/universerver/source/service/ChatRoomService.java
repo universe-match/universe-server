@@ -56,7 +56,7 @@ public class ChatRoomService {
         Optional<User> user = userRepository.findById(userId);
 
         chatroom.get().getChatRoomUser().stream().forEach(item->{
-            if(item.getUser().getFcmToken()!= null){
+            if(item.getUser().getFcmToken()!= null && item.getUser().isNotiYn()==true){
                 notificationService.sendNoti(item.getUser().getNickname(),item.getUser().getFcmToken(),"채팅방에 메세지가 왔습니다",user.get().getNickname()+"님이 메세지를 보냈습니다.");
             }
         });

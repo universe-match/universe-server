@@ -6,4 +6,6 @@ import lombok.Getter;
 public class AdminUserRequest {
 
     private long id;
+
+    private String rejectContent;
 }

@@ -114,16 +114,21 @@ public class User extends DateAudit {
     @Convert(converter=BooleanToYNConverter.class)
     private boolean alarmCheck;
 
-    @Convert(converter=BooleanToYNConverter.class)
-    private boolean verified = false;
+//    @Convert(converter=BooleanToYNConverter.class)
+//    private boolean verified = false;
     
     @Column(name="point")
     @ColumnDefault("0")
     private long point;
     @Column(name="delete_yn" ,columnDefinition = "varchar(1) default 'N'")
     private String deleteYn="N";
-    @Column(name="noti_yn" ,columnDefinition = "varchar(1) default 'N'")
-    private String notiYn;
+    @Convert(converter=BooleanToYNConverter.class)
+    private boolean notiYn;
+    @Column(name="apply",columnDefinition = "varchar(1) default 'N'" )
+    private String apply;//허용
+    @Column(name="reject_content" )
+    private String rejectContent;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -137,6 +142,7 @@ public class User extends DateAudit {
     @ManyToOne
     @JoinColumn(name = "chatRoomUser_id")
     private ChatRoomUser chatRoomUser;
+
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;

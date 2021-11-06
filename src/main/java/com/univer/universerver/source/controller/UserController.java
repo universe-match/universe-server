@@ -68,39 +68,7 @@ public class UserController extends HttpServlet {
     public String getUser() {
         return "";
     }
-//    @ApiOperation(value="로그인",notes="로그인")
-//    @PostMapping("/signin")
-//    public ResponseEntity<?> authenticateUser(@RequestBody LoginForm loginRequest, HttpServletResponse response) {
-//
-//        try {
-//            Authentication authentication = authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(
-//                            loginRequest.getUserid(),
-//                            loginRequest.getPassword()
-//                    )
-//            );
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//            String ROLE=auth.getAuthorities().toString();
-//
-//            UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
-//
-//            Optional<User> user = userService.findUserLoginId(loginRequest.getUserid());
-//            userService.saveAccessTime(user.get());//마지막 접속시간 저장
-//
-//            AuthTokenDTO authTokenDTO = authTokenService.createAuthToken(userPrincipal.getUsername());
-//            String jwt = jwtProvider.generateJwtToken(authentication);
-//            Map<String, String> map =new HashMap<String, String>();
-//            map.put("ROLE", ROLE);
-//            map.put("accessToken", authTokenDTO.getAccessToken());
-//            map.put("refreshToken", authTokenDTO.getRefreshToken());
-//            return ResponseEntity.ok(map);
-//        }catch(Exception e) {
-//            //e.printStackTrace();
-//            return new ResponseEntity<>("아이디나 비밀번호를 확인해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//
-//    }
+
     @PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
 
@@ -154,12 +122,12 @@ public class UserController extends HttpServlet {
         userService.myInfoDelete(principal.getName());
         return ResponseEntity.ok("서비스를 이용할수없으며 일주일 뒤 완전 삭제 됩니다.");
     }
-    @ApiOperation(value="알림여부체크",notes="알림여부체크")
-    @PatchMapping("/myinfo/noti")
-    public ResponseEntity<?> myInfoDelete(Principal principal,@RequestBody Map<String, String> param) {
-        String noti = param.get("noti");
-        long notiNumber = userService.myInfoNotiUpdate(principal.getName(),noti);
-        return ResponseEntity.ok(notiNumber);
+    @ApiOperation(value="알림 수정",notes="알림 수정")
+    @PatchMapping("/update/noti")
+    public ResponseEntity<?> myInfoDelete(Principal principal,@RequestBody Map<String, Boolean> param) {
+        boolean noti = param.get("noti");
+        boolean rtnNoti = userService.myInfoNotiUpdate(principal.getName(),noti);
+        return ResponseEntity.ok(rtnNoti);
     }
     @ApiOperation(value="회원가입",notes="회원가입")
     @PostMapping("/signup")
@@ -212,6 +180,13 @@ public class UserController extends HttpServlet {
     public ResponseEntity<?> validUser(Principal principal,@RequestBody AdminUserRequest adminUserRequest) {
         userService.validUser(adminUserRequest);
         return ResponseEntity.ok("활성화 되었습니다.");
+    }
+    @ApiOperation(value="유저 거절",notes="유저 거절")
+    @PatchMapping("/reject")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> rejectUser(Principal principal,@RequestBody AdminUserRequest adminUserRequest) {
+        userService.rejectUser(adminUserRequest);
+        return ResponseEntity.ok("거절 되었습니다.");
     }
     @ApiOperation(value="대학리스트 조회",notes="대학리스트 조회")
     @GetMapping("/university")

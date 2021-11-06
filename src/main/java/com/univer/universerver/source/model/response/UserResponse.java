@@ -33,8 +33,10 @@ public class UserResponse {
 
     private List<UserInteresting> userInterestings = new ArrayList<>();
 
-    private boolean verified;
+    private String apply;
 
+    private String rejectContent;
+    private boolean notiYn;
     public UserResponse(User user){
         this.id = user.getId();
         this.nickname = user.getNickname();
@@ -45,7 +47,9 @@ public class UserResponse {
         this.major = user.getMajor();
         this.userImages = user.getUserImages().stream().map(item->new UserImageResponse(item)).collect(Collectors.toList());
         this.userInterestings = user.getUserInterestings();
-        this.verified = user.isVerified();
+        this.apply = user.getApply();
+        this.rejectContent = user.getRejectContent();
+        this.notiYn = user.isNotiYn();
 //        this.profileImg = user.getProfileImg();
     }
 

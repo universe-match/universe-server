@@ -7,6 +7,7 @@ import java.util.*;
 import com.univer.universerver.source.model.*;
 import com.univer.universerver.source.model.request.UserRequest;
 import com.univer.universerver.source.model.request.admin.AdminUserRequest;
+import com.univer.universerver.source.pushnoti.service.NotificationService;
 import com.univer.universerver.source.repository.*;
 import com.univer.universerver.source.security.jwt.JwtAuthTokenFilter;
 import org.slf4j.Logger;
@@ -43,6 +44,8 @@ public class UserService {
     private CommonRepository commonRepository;
     @Autowired
     private userInterestingRepository userInterestingRepository;
+    @Autowired
+    private NotificationService notificationService;
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthTokenFilter.class);
 
@@ -57,7 +60,7 @@ public class UserService {
         	throw new UserException(ErrorCode.NICKNAME_DUPLICATION);
         }
         User user = new User(signUpForm, encoder.encode(signUpForm.getPassword()));
-
+        user.setNotiYn(true);
         Set<String> strRoles = new HashSet<>();
         strRoles.add("user");
         Set<Role> roles = new HashSet<>();
@@ -124,14 +127,16 @@ public class UserService {
         userRepository.save(user.get());
     }
 
-    public long myInfoNotiUpdate(String userName, String noti) {
+    public boolean myInfoNotiUpdate(String userName, boolean noti) {
         Optional<User> user = userService.findMyUserInfo(userName);
-        if(noti.equals("0")){
-            user.get().setNotiYn("N");
+        if(!noti){
+            user.get().setNotiYn(false);
+
         }else{
-            user.get().setNotiYn("Y");
+            user.get().setNotiYn(true);
         }
-        return Integer.parseInt(noti);
+        userRepository.save(user.get());
+        return noti;
     }
 
 
@@ -183,9 +188,11 @@ public class UserService {
     public void validUser(AdminUserRequest adminUserRequest) {
         Optional<User> user=userRepository.findById(adminUserRequest.getId());
         user.ifPresent(userOne -> {
-            userOne.setVerified(true);
+            userOne.setApply("Y");
+            userOne.setRejectContent("");
             userRepository.save(userOne);
         });
+        notificationService.sendNoti(user.get().getNickname(),user.get().getFcmToken(),"승인",user.get().getNickname()+"님 승인완료되었습니다!");
     }
 
     public List<University> findAllUniversity() {
@@ -198,5 +205,14 @@ public class UserService {
 
     public List<Common> findInterested() {
         return commonRepository.findByComCd("CD01");
+    }
+
+    public void rejectUser(AdminUserRequest adminUserRequest) {
+        Optional<User> user=userRepository.findById(adminUserRequest.getId());
+        user.ifPresent(userOne -> {
+            userOne.setApply("R");
+            userOne.setRejectContent(adminUserRequest.getRejectContent());
+            userRepository.save(userOne);
+        });
     }
 }

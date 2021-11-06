@@ -31,6 +31,9 @@ public class AdminUserResponse {
     private List<UserImageResponse> userImages = new ArrayList<UserImageResponse>();
 
     private String universeCertiImg;
+    private String apply;
+
+    private String rejectContent;
 
     public AdminUserResponse(User user){
         this.id = user.getId();
@@ -40,7 +43,8 @@ public class AdminUserResponse {
         this.universeName = user.getUniverseName();
         this.major = user.getMajor();
         this.introduce = user.getIntroduce();
-        this.verified = user.isVerified();
+        this.apply = user.getApply();
+        this.rejectContent = user.getRejectContent();
         this.deleteYn = user.getDeleteYn();
         this.userImages = user.getUserImages().stream().map(item->new UserImageResponse(item)).collect(Collectors.toList());
         this.universeCertiImg = user.getUniverseCertiImg();

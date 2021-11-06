@@ -102,9 +102,7 @@ public class ChatHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String text = message.getPayload();
-
-
-
+        
         JSONObject object = JsonUtil.parse(text);
         log.info(object.toJSONString());
 
